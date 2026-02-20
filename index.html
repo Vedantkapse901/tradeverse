@@ -21,7 +21,8 @@
                         dark: {
                             900: '#0a0a0a',
                             800: '#171717',
-                            700: '#262626'
+                            700: '#262626',
+                            600: '#404040'
                         }
                     },
                     fontFamily: {
@@ -29,11 +30,17 @@
                     },
                     animation: {
                         'marquee': 'marquee 25s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
                     },
                     keyframes: {
                         marquee: {
                             '0%': { transform: 'translateX(100%)' },
                             '100%': { transform: 'translateX(-100%)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
                         }
                     }
                 }
@@ -111,6 +118,10 @@
             box-shadow: 0 4px 20px rgba(234, 179, 8, 0.15);
             border-color: rgba(234, 179, 8, 0.5);
             transform: translateY(-2px);
+        }
+
+        .hero-glow {
+            box-shadow: 0 0 100px 30px rgba(234, 179, 8, 0.15);
         }
     </style>
 </head>
@@ -238,11 +249,13 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
                         <button onclick="navigateTo('home')" class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="home">Home</button>
-                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Dashboard</button>
+                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Markets</button>
                         <button onclick="navigateTo('community')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="community">Community</button>
                         <button onclick="navigateTo('ai-chat')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="ai-chat">AI Analyst</button>
                         <button onclick="navigateTo('premium')" class="px-4 py-2 rounded-md text-sm font-bold bg-gold-600 text-dark-900 hover:bg-gold-500 transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Premium</button>
-                        <div id="auth-wrapper-desktop" class="inline-block ml-4 border-l border-dark-700 pl-4">
+                        
+                        <!-- Auth Section -->
+                        <div id="auth-wrapper-desktop" class="inline-flex items-center ml-4 border-l border-dark-700 pl-4 space-x-3">
                             <button onclick="toggleLoginModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i class="fa-solid fa-user mr-2"></i>Login</button>
                         </div>
                     </div>
@@ -259,11 +272,11 @@
         <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gold-500/30 absolute w-full z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
-                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Dashboard</button>
+                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
                 <button onclick="navigateTo('community'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Community</button>
                 <button onclick="navigateTo('ai-chat'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">AI Analyst</button>
                 <button onclick="navigateTo('premium'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-bold text-gold-500">Premium</button>
-                <div id="auth-wrapper-mobile" class="px-3 py-2 mt-2 border-t border-dark-700">
+                <div id="auth-wrapper-mobile" class="px-3 py-2 mt-2 border-t border-dark-700 space-y-2">
                     <button onclick="toggleLoginModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
                 </div>
             </div>
@@ -271,7 +284,7 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main class="flex-grow">
+    <main class="flex-grow relative">
         
         <!-- HOME PAGE -->
         <section id="page-home" class="page-section">
@@ -285,43 +298,85 @@
                 </div>
             </div>
 
-            <!-- Hero Section -->
-            <div class="relative overflow-hidden">
+            <!-- Hero Section with Modern Web3/Trading Feel -->
+            <div class="relative overflow-hidden min-h-[70vh] flex items-center">
+                <!-- Decorative Background Elements -->
                 <div class="absolute inset-0 z-0">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.15)_0,rgba(10,10,10,1)_100%)]"></div>
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.1)_0,rgba(10,10,10,1)_80%)]"></div>
+                    <!-- Floating Bitcoin Icon -->
+                    <div class="absolute top-[15%] left-[10%] animate-float opacity-30 text-gold-500 text-8xl md:text-[150px] rotate-12 blur-[2px]">
+                        <i class="fa-brands fa-bitcoin"></i>
+                    </div>
+                    <!-- Floating Ethereum Icon -->
+                    <div class="absolute bottom-[20%] right-[10%] animate-float-delayed opacity-20 text-blue-400 text-7xl md:text-[120px] -rotate-12 blur-[1px]">
+                        <i class="fa-brands fa-ethereum"></i>
+                    </div>
+                    <!-- Floating Chart Icon -->
+                    <div class="absolute top-[30%] right-[25%] animate-float opacity-10 text-green-500 text-6xl md:text-[100px] rotate-6 blur-[3px]">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
                 </div>
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16 pb-20 text-center lg:pt-28">
-                    <span class="bg-dark-800 border border-gold-500/30 text-gold-500 text-xs font-bold px-3 py-1 rounded-full mb-6 inline-block tracking-widest uppercase">Now with Gemini AI Insights ✨</span>
-                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
-                        The Encyclopedia of <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Modern Trading</span>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16 pb-20 text-center w-full">
+                    <div class="inline-flex items-center gap-2 bg-dark-800/80 border border-gold-500/30 text-gold-500 text-xs font-bold px-4 py-2 rounded-full mb-8 tracking-widest uppercase backdrop-blur-md">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-gold-500"></span>
+                        </span>
+                        Now with Gemini AI Insights
+                    </div>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 leading-tight drop-shadow-2xl">
+                        The Hub for <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-yellow-200 to-gold-600 hero-glow">Modern Traders</span>
                     </h1>
-                    <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 mb-10">
-                        Tradeverse is your definitive hub for Cryptocurrencies, the National Stock Exchange of India (NSE), and Global Forex markets. Access live data, chat with peers, and consult our AI.
+                    <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 mb-10 drop-shadow-md">
+                        Tradeverse is your definitive screener for Crypto, the NSE, and Global Forex. Access live data, chat with peers, and execute paper trades risk-free.
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_20px_rgba(234,179,8,0.3)]">Explore Dashboard</button>
-                        <button onclick="navigateTo('ai-chat')" class="px-8 py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg">Ask AI Analyst</button>
+                        <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_30px_rgba(234,179,8,0.4)] flex items-center justify-center gap-2">
+                            Explore Markets <i class="fa-solid fa-arrow-trend-up"></i>
+                        </button>
+                        <button onclick="toggleLoginModal()" id="hero-login-btn" class="px-8 py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg backdrop-blur-md">
+                            Start Paper Trading
+                        </button>
+                    </div>
+
+                    <!-- Mini Market Sentiment Widget -->
+                    <div class="mt-16 max-w-3xl mx-auto glass-panel p-4 rounded-xl flex items-center justify-around border-gold-500/20 text-sm">
+                        <div class="text-center">
+                            <div class="text-gray-500 uppercase tracking-widest text-xs mb-1">Global Volume</div>
+                            <div class="font-bold text-white text-lg">$142.8B</div>
+                        </div>
+                        <div class="w-px h-8 bg-dark-700"></div>
+                        <div class="text-center">
+                            <div class="text-gray-500 uppercase tracking-widest text-xs mb-1">Market Sentiment</div>
+                            <div class="font-bold text-green-500 text-lg flex items-center justify-center gap-1"><i class="fa-solid fa-arrow-up-right-dots"></i> Bullish</div>
+                        </div>
+                        <div class="w-px h-8 bg-dark-700"></div>
+                        <div class="text-center">
+                            <div class="text-gray-500 uppercase tracking-widest text-xs mb-1">Active Traders</div>
+                            <div class="font-bold text-gold-400 text-lg">12,409</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Ad Banner Section (Home) -->
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/30 p-8 flex flex-col md:flex-row items-center justify-between group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/30 p-8 flex flex-col md:flex-row items-center justify-between group cursor-pointer shadow-2xl">
                     <div class="absolute inset-0 bg-black opacity-20 group-hover:opacity-10 transition"></div>
                     <div class="relative z-10 mb-4 md:mb-0">
                         <span class="text-xs font-bold bg-blue-500 text-white px-2 py-1 rounded uppercase tracking-wider mb-2 inline-block">Sponsored</span>
-                        <h3 class="text-2xl font-bold text-white mb-2">Start Trading on Binance</h3>
+                        <h3 class="text-2xl font-bold text-white mb-2">Ready for Real Trading? Join Binance.</h3>
                         <p class="text-blue-200">Get up to $100 in welcome rewards when you sign up using our exclusive partner link.</p>
                     </div>
-                    <button class="relative z-10 px-6 py-3 bg-yellow-400 text-black font-bold rounded hover:bg-yellow-300 transition whitespace-nowrap">Claim Reward <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    <button class="relative z-10 px-6 py-3 bg-yellow-400 text-black font-bold rounded hover:bg-yellow-300 transition whitespace-nowrap shadow-lg">Claim Reward <i class="fa-solid fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
 
             <!-- Features Grid -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-                <h2 class="text-3xl font-bold text-center text-white mb-10 border-b border-dark-700 pb-4 inline-block mx-auto">Master Every Market</h2>
+                <h2 class="text-3xl font-bold text-center text-white mb-10 border-b border-dark-700 pb-4 inline-block mx-auto">Master Every Asset Class</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
                     <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
                         <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
@@ -343,30 +398,6 @@
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">Forex Hub</h3>
                         <p class="text-gray-400">Monitor major and minor fiat pairs. Keep a pulse on global macroeconomic shifts affecting exchange rates 24/5.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonials -->
-            <div class="bg-dark-800 border-y border-gold-500/20 py-16">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-3xl font-bold text-center text-white mb-12">Trusted by Traders Worldwide</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
-                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <p class="text-gray-300 mb-4">"The AI Analyst feature is a game changer. It breaks down complex NSE earnings reports in seconds. Worth every penny of the Pro tier."</p>
-                            <div class="font-bold text-white">- Rahul M., Mumbai</div>
-                        </div>
-                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
-                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                            <p class="text-gray-300 mb-4">"I love having my crypto charts and forex pairs all in one tab. The UI is incredibly clean and fast. Tradeverse replaced three different apps for me."</p>
-                            <div class="font-bold text-white">- Sarah T., London</div>
-                        </div>
-                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
-                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
-                            <p class="text-gray-300 mb-4">"The community chat is highly active and strictly moderated. No spam, just pure technical analysis and fundamental news sharing."</p>
-                            <div class="font-bold text-white">- Alex K., Dubai</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -421,6 +452,11 @@
                                 <!-- Populated by JS -->
                             </tbody>
                         </table>
+                        <!-- Login Prompt overlay if logged out (added dynamically via JS but placeholder below) -->
+                        <div id="screener-login-prompt" class="p-4 text-center border-t border-dark-800 mt-2">
+                            <p class="text-xs text-gray-500 mb-2">Want to execute paper trades?</p>
+                            <button onclick="toggleLoginModal()" class="text-xs text-gold-500 hover:text-gold-400 font-bold underline">Login to Trade</button>
+                        </div>
                     </div>
                 </div>
 
@@ -451,6 +487,83 @@
                         <div id="news-container" class="overflow-y-auto custom-scrollbar pr-2 space-y-3 flex-grow">
                             <!-- News articles injected by JS -->
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USER DASHBOARD PAGE (NEW) -->
+        <section id="page-dashboard" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-80px)] flex flex-col">
+            <div class="flex items-center justify-between border-b border-gold-500/30 pb-4 mb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-white"><i class="fa-solid fa-address-card text-gold-500 mr-3"></i>User Dashboard</h2>
+                    <p class="text-gray-400 text-sm mt-1" id="dash-greeting">Welcome back, Trader.</p>
+                </div>
+                <button onclick="toggleDepositModal()" class="px-5 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                    <i class="fa-solid fa-plus mr-2"></i>Deposit Funds
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow">
+                <!-- Left Column: Balances & Portfolio -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Account Summary Card -->
+                    <div class="glass-panel p-6 rounded-2xl border-gold-500/50 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
+                        <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-4">Account Summary</h3>
+                        
+                        <div class="mb-4">
+                            <p class="text-xs text-gray-500 mb-1">Total Portfolio Value (Est. INR)</p>
+                            <p class="text-4xl font-extrabold text-white" id="dash-total-value">₹0.00</p>
+                        </div>
+                        
+                        <div class="w-full h-px bg-dark-700 my-4"></div>
+                        
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-400">Available Cash</span>
+                            <span class="font-bold text-green-400" id="dash-available-cash">₹0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Invested Assets</span>
+                            <span class="font-bold text-gold-400" id="dash-invested-value">₹0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Current Holdings -->
+                    <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col max-h-[400px]">
+                        <div class="bg-dark-800 p-4 border-b border-dark-700">
+                            <h3 class="text-gray-200 text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-briefcase text-gold-500 mr-2"></i>Current Holdings</h3>
+                        </div>
+                        <div class="overflow-y-auto custom-scrollbar flex-grow p-4">
+                            <div id="dash-holdings-list" class="space-y-4">
+                                <!-- Holdings injected here -->
+                                <p class="text-gray-500 text-sm text-center py-4">No assets in portfolio.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Transaction History -->
+                <div class="lg:col-span-2 glass-panel p-0 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="bg-dark-800 p-4 border-b border-dark-700 flex justify-between items-center">
+                        <h3 class="text-gray-200 text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-clock-rotate-left text-gold-500 mr-2"></i>Transaction History</h3>
+                        <span class="text-xs bg-dark-900 border border-dark-600 px-2 py-1 rounded text-gray-400">Paper Trades</span>
+                    </div>
+                    <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
+                        <table class="w-full text-left text-sm text-gray-300">
+                            <thead class="text-xs text-gray-500 bg-dark-900 sticky top-0 z-10 border-b border-dark-700">
+                                <tr>
+                                    <th class="px-6 py-4 font-semibold">Date & Time</th>
+                                    <th class="px-6 py-4 font-semibold">Type</th>
+                                    <th class="px-6 py-4 font-semibold">Asset</th>
+                                    <th class="px-6 py-4 font-semibold text-right">Qty</th>
+                                    <th class="px-6 py-4 font-semibold text-right">Value (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-history-body" class="divide-y divide-dark-800/50">
+                                <!-- History injected here -->
+                                <tr><td colspan="5" class="text-center py-8 text-gray-500">No transactions yet. Start trading in the Markets dashboard!</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -605,6 +718,10 @@
         const apiKey = ""; // API key injected by environment
         let tvWidget = null;
         let activeMarket = 'crypto';
+        
+        // --- NEW: User Account State including Quantity Portfolio & History ---
+        let userAccount = null; 
+        let selectedTradeAsset = null;
 
         // Initialize Cookies on load
         document.addEventListener('DOMContentLoaded', () => {
@@ -632,6 +749,12 @@
 
         /* --- NAVIGATION --- */
         function navigateTo(pageId) {
+            // Require login for dashboard
+            if(pageId === 'dashboard' && !userAccount) {
+                toggleLoginModal();
+                return;
+            }
+
             // Hide all sections
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
             // Show target section
@@ -647,9 +770,9 @@
 
             // Initialize specific page logic
             if (pageId === 'markets') {
-                if(!tvWidget) {
-                    switchMarket('crypto');
-                }
+                if(!tvWidget) switchMarket('crypto');
+            } else if (pageId === 'dashboard') {
+                updateDashboardUI();
             }
         }
 
@@ -745,16 +868,28 @@
             const tableBody = document.getElementById('asset-table-body');
             tableBody.innerHTML = '';
             
+            // Manage Login prompt in screener
+            const loginPrompt = document.getElementById('screener-login-prompt');
+            if(userAccount) {
+                if(loginPrompt) loginPrompt.classList.add('hidden');
+            } else {
+                if(loginPrompt) loginPrompt.classList.remove('hidden');
+            }
+            
             marketData[marketType].forEach((asset, index) => {
                 const tr = document.createElement('tr');
                 tr.className = `asset-row border-b border-dark-800/50 ${index === 0 ? 'active' : ''}`;
+                
+                // Conditional Trade Button
+                const tradeBtnHtml = userAccount ? `<button onclick="openTradeModal('${asset.name}', '${asset.ticker}')" class="text-xs bg-green-600/10 hover:bg-green-600 text-green-500 hover:text-white border border-green-600/30 px-3 py-1 rounded transition">Trade</button>` : '';
+
                 tr.innerHTML = `
                     <td class="px-4 py-3" onclick="selectAsset(this, '${asset.symbol}')">
                         <div class="font-bold text-gray-200">${asset.name}</div>
                         <div class="text-xs text-gray-500">${asset.ticker}</div>
                     </td>
                     <td class="px-3 py-3 text-right flex justify-end gap-2">
-                        <button onclick="openTradeModal('${asset.name}', '${asset.ticker}')" class="text-xs bg-green-600/10 hover:bg-green-600 text-green-500 hover:text-white border border-green-600/30 px-3 py-1 rounded transition">Trade</button>
+                        ${tradeBtnHtml}
                         <button onclick="analyzeAsset('${asset.name}')" class="text-xs bg-dark-700 hover:bg-gold-500 hover:text-dark-900 text-gold-500 border border-gold-500/30 px-2 py-1 rounded transition group" title="Get AI Analysis">
                             <i class="fa-solid fa-sparkles"></i> <span class="hidden xl:inline">AI</span>
                         </button>
@@ -817,8 +952,6 @@
 
 
         /* --- NEW GEMINI API FEATURES --- */
-
-        // Feature 1: Analyze specific asset fundamentally
         async function analyzeAsset(assetName) {
             const prompt = `Act as an expert financial analyst. Provide a brief, 2-sentence fundamental analysis of the financial asset "${assetName}". What is its current overarching market narrative?`;
             
@@ -844,7 +977,6 @@
             }
         }
 
-        // Feature 2: Analyze general news sentiment
         async function analyzeNewsSentiment() {
             const btn = document.getElementById('btn-analyze-sentiment');
             const originalHTML = btn.innerHTML;
@@ -1092,6 +1224,20 @@
             { symbol: "EURUSD", display: "EUR/USD", price: 1.0845, change: -0.1, isCrypto: false }
         ];
 
+        // Fetch generic current price globally across all assets logic
+        function getCurrentEstimatedPrice(ticker) {
+            const tData = tickerData.find(t => t.display.includes(ticker) || t.symbol.includes(ticker));
+            if (tData) {
+                // Convert Crypto USD to roughly INR equivalent for universal balance (1 USD = 83 INR mock)
+                return tData.price * (tData.isCrypto ? 83 : 1);
+            }
+            // Fallback mock prices if not in top ticker buffer
+            if(ticker.includes('USD')) return 83.5;
+            if(ticker === 'ADA') return 45.5; 
+            if(ticker === 'DOGE') return 12.3;
+            return 1000.0; // generic fallback
+        }
+
         async function fetchLiveTickerData() {
             try {
                 // Real Binance API for Crypto Quotes (Public, no key required)
@@ -1122,6 +1268,11 @@
             });
 
             updateTickerUI();
+            
+            // If on dashboard, update real-time portfolio value
+            if(!document.getElementById('page-dashboard').classList.contains('hidden') && userAccount) {
+                updateDashboardUI();
+            }
         }
 
         function updateTickerUI() {
@@ -1141,14 +1292,12 @@
             if(marketsTicker) marketsTicker.innerHTML = htmlString + htmlString;
         }
 
-        // Initialize Ticker and refresh every 30 seconds
+        // Initialize Ticker and refresh every 15 seconds
         fetchLiveTickerData();
-        setInterval(fetchLiveTickerData, 30000);
+        setInterval(fetchLiveTickerData, 15000);
 
 
         /* --- AUTHENTICATION & PAPER TRADING LOGIC --- */
-        let userAccount = null; 
-        let selectedTradeAsset = null;
 
         function toggleLoginModal() {
             document.getElementById('login-modal').classList.toggle('hidden');
@@ -1157,10 +1306,42 @@
         function processLogin(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value;
-            userAccount = { username: username, balance: 0, portfolio: {} };
+            // Initialize Account with Portfolio Quantity object and History Array
+            userAccount = { username: username, balance: 100000, portfolio: {}, history: [] }; 
+            
             toggleLoginModal();
             updateAuthUI();
-            showModal(`Welcome to the trading floor, ${username}!<br><br>Click your wallet balance in the navigation bar to deposit funds and start executing live orders.`, "Authentication Successful");
+            
+            // Re-render market screener to show "Trade" buttons
+            switchMarket(activeMarket); 
+
+            // Hide Hero Login Button
+            const heroBtn = document.getElementById('hero-login-btn');
+            if(heroBtn) heroBtn.classList.add('hidden');
+
+            showModal(`Welcome to the trading floor, ${username}!<br><br>We have credited your wallet with ₹100,000 in paper trading funds. Access your Dashboard from the top menu to view your portfolio.`, "Authentication Successful");
+        }
+
+        function processLogout() {
+            // Clear user session
+            userAccount = null;
+            
+            // Revert UI elements
+            updateAuthUI();
+            
+            // Re-render market screener to hide "Trade" buttons and show login prompt
+            switchMarket(activeMarket);
+            
+            // Show Hero Login Button again
+            const heroBtn = document.getElementById('hero-login-btn');
+            if(heroBtn) heroBtn.classList.remove('hidden');
+
+            // If user is on the dashboard while logging out, kick them back to the home page
+            if (!document.getElementById('page-dashboard').classList.contains('hidden')) {
+                navigateTo('home');
+            }
+
+            showModal("You have securely logged out of your trading account. See you next time!", "Logged Out");
         }
 
         function updateAuthUI() {
@@ -1168,13 +1349,34 @@
             const mobileWrapper = document.getElementById('auth-wrapper-mobile');
             
             if(userAccount) {
-                const html = `
-                    <button onclick="toggleDepositModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(34,197,94,0.2)] w-full md:w-auto">
+                const htmlDesktop = `
+                    <button onclick="navigateTo('dashboard')" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-address-card"></i> My Dashboard
+                    </button>
+                    <button onclick="toggleDepositModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
                         <i class="fa-solid fa-wallet"></i> ₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                     </button>
+                    <button onclick="processLogout()" class="px-3 py-2 rounded-md text-sm font-bold bg-red-900/30 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition flex items-center justify-center" title="Logout">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                    </button>
                 `;
-                if(desktopWrapper) desktopWrapper.innerHTML = html;
-                if(mobileWrapper) mobileWrapper.innerHTML = html;
+                const htmlMobile = `
+                    <button onclick="navigateTo('dashboard'); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">My Dashboard</button>
+                    <button onclick="toggleDepositModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition">₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</button>
+                    <button onclick="processLogout(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-red-900/30 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition">Logout</button>
+                `;
+                if(desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
+                if(mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
+            } else {
+                // Restore the default Login state when logged out
+                const htmlDesktop = `
+                    <button onclick="toggleLoginModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i class="fa-solid fa-user mr-2"></i>Login</button>
+                `;
+                const htmlMobile = `
+                    <button onclick="toggleLoginModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
+                `;
+                if(desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
+                if(mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
             }
         }
 
@@ -1187,7 +1389,19 @@
             const amount = parseFloat(document.getElementById('deposit-amount').value);
             if(amount > 0) {
                 userAccount.balance += amount;
+                
+                // Record transaction
+                userAccount.history.unshift({
+                    date: new Date().toLocaleString(),
+                    type: 'DEPOSIT',
+                    asset: 'INR',
+                    qty: '-',
+                    value: amount
+                });
+
                 updateAuthUI();
+                if(!document.getElementById('page-dashboard').classList.contains('hidden')) updateDashboardUI();
+
                 toggleDepositModal();
                 showModal(`₹${amount.toLocaleString('en-IN')} has been securely added to your trading account.`, "Deposit Complete");
             }
@@ -1201,15 +1415,8 @@
             }
             
             selectedTradeAsset = { name: assetName, ticker: assetTicker };
-            
-            // Look for live price in the ticker buffer
-            const tData = tickerData.find(t => t.display.includes(assetTicker) || t.symbol.includes(assetTicker));
-            let priceStr = "Market Execution";
-            if (tData) {
-                // Convert Crypto USD to roughly INR equivalent for universal balance
-                const estimatedInrPrice = tData.price * (tData.isCrypto ? 83 : 1);
-                priceStr = `Live Ask: ₹${estimatedInrPrice.toLocaleString('en-IN', {maximumFractionDigits:2})}`;
-            }
+            const estimatedInrPrice = getCurrentEstimatedPrice(assetTicker);
+            const priceStr = `Live Ask: ₹${estimatedInrPrice.toLocaleString('en-IN', {maximumFractionDigits:2})}`;
             
             document.getElementById('trade-asset-title').innerText = `Trade ${assetTicker}`;
             document.getElementById('trade-asset-price').innerText = priceStr;
@@ -1222,34 +1429,123 @@
         }
 
         function executeTrade(type) {
-            const amount = parseFloat(document.getElementById('trade-amount').value);
-            if(!amount || amount <= 0) return;
+            const amountInr = parseFloat(document.getElementById('trade-amount').value);
+            if(!amountInr || amountInr <= 0) return;
+
+            const currentPrice = getCurrentEstimatedPrice(selectedTradeAsset.ticker);
+            const quantity = amountInr / currentPrice;
 
             if(type === 'buy') {
-                if(userAccount.balance >= amount) {
-                    userAccount.balance -= amount;
+                if(userAccount.balance >= amountInr) {
+                    userAccount.balance -= amountInr;
                     
                     if(!userAccount.portfolio[selectedTradeAsset.ticker]) userAccount.portfolio[selectedTradeAsset.ticker] = 0;
-                    userAccount.portfolio[selectedTradeAsset.ticker] += amount;
+                    userAccount.portfolio[selectedTradeAsset.ticker] += quantity;
+
+                    userAccount.history.unshift({
+                        date: new Date().toLocaleString(),
+                        type: 'BUY',
+                        asset: selectedTradeAsset.ticker,
+                        qty: quantity,
+                        value: amountInr
+                    });
 
                     updateAuthUI();
                     closeTradeModal();
-                    showModal(`Order filled successfully. Purchased ₹${amount.toLocaleString('en-IN')} worth of ${selectedTradeAsset.ticker}.`, "Buy Order Executed");
+                    showModal(`Order filled successfully. Purchased ${quantity.toFixed(4)} ${selectedTradeAsset.ticker}.`, "Buy Order Executed");
                 } else {
                     showModal("Insufficient buying power. Please deposit more funds into your wallet to execute this trade.", "Trade Failed");
                 }
             } else if (type === 'sell') {
-                const holding = userAccount.portfolio[selectedTradeAsset.ticker] || 0;
-                if(holding >= amount) {
-                    userAccount.portfolio[selectedTradeAsset.ticker] -= amount;
-                    userAccount.balance += amount; 
+                const holdingQty = userAccount.portfolio[selectedTradeAsset.ticker] || 0;
+                
+                // User must enter INR value, we calculate if they have enough Quantity to cover that INR value
+                if(holdingQty >= quantity) {
+                    userAccount.portfolio[selectedTradeAsset.ticker] -= quantity;
+                    userAccount.balance += amountInr; 
                     
+                    userAccount.history.unshift({
+                        date: new Date().toLocaleString(),
+                        type: 'SELL',
+                        asset: selectedTradeAsset.ticker,
+                        qty: quantity,
+                        value: amountInr
+                    });
+
                     updateAuthUI();
                     closeTradeModal();
-                    showModal(`Order filled successfully. Sold ₹${amount.toLocaleString('en-IN')} worth of ${selectedTradeAsset.ticker}.`, "Sell Order Executed");
+                    showModal(`Order filled successfully. Sold ${quantity.toFixed(4)} ${selectedTradeAsset.ticker}.`, "Sell Order Executed");
                 } else {
-                    showModal(`Insufficient holdings. You only own ₹${holding.toLocaleString('en-IN')} of ${selectedTradeAsset.ticker} in your portfolio.`, "Trade Failed");
+                    const maxInrValue = holdingQty * currentPrice;
+                    showModal(`Insufficient holdings. You only own ${holdingQty.toFixed(4)} ${selectedTradeAsset.ticker} (Approx. ₹${maxInrValue.toLocaleString('en-IN', {maximumFractionDigits:2})}).`, "Trade Failed");
                 }
+            }
+        }
+
+        /* --- DASHBOARD UI UPDATER --- */
+        function updateDashboardUI() {
+            if(!userAccount) return;
+
+            document.getElementById('dash-greeting').innerText = `Welcome back, ${userAccount.username}. Here is your live portfolio.`;
+            document.getElementById('dash-available-cash').innerText = `₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            // Calculate Portfolio Value & Render Holdings list
+            let totalInvestedValue = 0;
+            const holdingsContainer = document.getElementById('dash-holdings-list');
+            holdingsContainer.innerHTML = '';
+
+            const keys = Object.keys(userAccount.portfolio);
+            if(keys.length === 0 || keys.every(k => userAccount.portfolio[k] <= 0.000001)) {
+                holdingsContainer.innerHTML = `<p class="text-gray-500 text-sm text-center py-4">No assets in portfolio. Visit the screener to start trading.</p>`;
+            } else {
+                keys.forEach(ticker => {
+                    const qty = userAccount.portfolio[ticker];
+                    if(qty > 0.000001) { // Ignore tiny dust
+                        const price = getCurrentEstimatedPrice(ticker);
+                        const valueInr = qty * price;
+                        totalInvestedValue += valueInr;
+
+                        holdingsContainer.insertAdjacentHTML('beforeend', `
+                            <div class="flex justify-between items-center bg-dark-900 p-3 rounded border border-dark-700">
+                                <div>
+                                    <div class="font-bold text-gray-200">${ticker}</div>
+                                    <div class="text-xs text-gray-500">${qty.toFixed(4)} QTY @ ₹${price.toLocaleString('en-IN', {maximumFractionDigits:2})}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-white">₹${valueInr.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+                                </div>
+                            </div>
+                        `);
+                    }
+                });
+            }
+
+            document.getElementById('dash-invested-value').innerText = `₹${totalInvestedValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            const totalPortfolioValue = userAccount.balance + totalInvestedValue;
+            document.getElementById('dash-total-value').innerText = `₹${totalPortfolioValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            // Render Transaction History
+            const historyBody = document.getElementById('dash-history-body');
+            historyBody.innerHTML = '';
+            
+            if(userAccount.history.length === 0) {
+                historyBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">No transactions yet. Start trading in the Markets dashboard!</td></tr>`;
+            } else {
+                userAccount.history.forEach(tx => {
+                    const typeColor = tx.type === 'BUY' || tx.type === 'DEPOSIT' ? 'text-green-500' : 'text-red-500';
+                    const qtyStr = tx.qty === '-' ? '-' : parseFloat(tx.qty).toFixed(4);
+                    
+                    historyBody.insertAdjacentHTML('beforeend', `
+                        <tr class="hover:bg-dark-800/50 transition">
+                            <td class="px-6 py-4 text-xs text-gray-400 whitespace-nowrap">${tx.date}</td>
+                            <td class="px-6 py-4 font-bold ${typeColor}">${tx.type}</td>
+                            <td class="px-6 py-4 font-semibold text-white">${tx.asset}</td>
+                            <td class="px-6 py-4 text-right text-gray-300">${qtyStr}</td>
+                            <td class="px-6 py-4 text-right font-bold text-white">₹${tx.value.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+                        </tr>
+                    `);
+                });
             }
         }
 
