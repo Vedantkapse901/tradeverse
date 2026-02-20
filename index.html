@@ -123,6 +123,30 @@
         .hero-glow {
             box-shadow: 0 0 100px 30px rgba(234, 179, 8, 0.15);
         }
+
+        /* Creator Credit Styling */
+        .creator-credit {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(38, 38, 38, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        .creator-name {
+            color: #eab308;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .creator-name:hover {
+            color: #facc15;
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -714,6 +738,9 @@
     <footer class="bg-black border-t border-dark-800 py-6 sm:py-8 text-center text-gray-500 text-xs sm:text-sm mt-auto px-4">
         <p>&copy; 2026 Tradeverse. All Rights Reserved.</p>
         <p class="mt-2 text-[10px] sm:text-xs">Trading involves high risk. This platform is for educational/paper-trading purposes only.</p>
+        <div class="creator-credit">
+            Made with <i class="fa-solid fa-heart text-red-500 animate-pulse text-xs"></i> by <span class="creator-name">Vedant Kapse</span>
+        </div>
     </footer>
 
     <script>
