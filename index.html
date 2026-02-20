@@ -6,7 +6,6 @@
     <title>Tradeverse | The Ultimate Trading Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -26,6 +25,15 @@
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        }
                     }
                 }
             }
@@ -69,6 +77,7 @@
         .asset-btn.active {
             border-color: #facc15;
             color: #facc15;
+            background-color: rgba(234, 179, 8, 0.1);
         }
 
         .glass-panel {
@@ -87,16 +96,53 @@
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1); }
         }
+
+        /* News Card Hover */
+        .news-card:hover {
+            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.15);
+            border-color: rgba(234, 179, 8, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Global Message Modal (replaces alert) -->
-    <div id="custom-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80">
-        <div class="glass-panel p-8 rounded-xl max-w-sm w-full text-center border-gold-500 border">
+    <!-- Global Message Modal -->
+    <div id="custom-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel p-8 rounded-xl max-w-sm w-full text-center border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
             <h3 id="modal-title" class="text-2xl font-bold text-gold-400 mb-4">Notice</h3>
             <p id="modal-message" class="text-gray-300 mb-6"></p>
-            <button onclick="closeModal()" class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition">OK</button>
+            <button onclick="closeModal()" class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition w-full">OK</button>
+        </div>
+    </div>
+
+    <!-- Mock Razorpay Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-md">
+        <div class="bg-white rounded-lg max-w-md w-full overflow-hidden shadow-2xl">
+            <div class="bg-blue-600 p-6 text-center">
+                <h3 class="text-2xl font-bold text-white mb-1">Tradeverse Checkout</h3>
+                <p class="text-blue-200 text-sm">Secured by MockPay</p>
+            </div>
+            <div class="p-6 text-gray-800">
+                <div class="flex justify-between mb-4 border-b pb-4">
+                    <span class="font-semibold text-gray-600">Plan:</span>
+                    <span id="pay-plan-name" class="font-bold">Pro Trader</span>
+                </div>
+                <div class="flex justify-between mb-6">
+                    <span class="font-semibold text-gray-600">Amount:</span>
+                    <span id="pay-plan-amount" class="font-bold text-xl text-green-600">₹1,499</span>
+                </div>
+                
+                <div id="payment-processing" class="hidden text-center py-4">
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-blue-600 mb-3"></i>
+                    <p class="font-medium text-gray-600">Processing Payment...</p>
+                </div>
+
+                <div id="payment-actions">
+                    <button onclick="processMockPayment()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition mb-3 shadow-md">Pay Now</button>
+                    <button onclick="closePaymentModal()" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded hover:bg-gray-300 transition">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -126,7 +172,7 @@
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gold-500/30">
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gold-500/30 absolute w-full z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
                 <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
@@ -142,73 +188,150 @@
         
         <!-- HOME PAGE -->
         <section id="page-home" class="page-section">
+            <!-- Live Ticker -->
+            <div class="bg-dark-900 border-b border-gold-500/20 overflow-hidden whitespace-nowrap py-2 flex items-center">
+                <div class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 absolute left-0">LIVE STATS</div>
+                <div class="inline-block animate-marquee pl-32 text-sm text-gray-300">
+                    <span class="mx-4">BTC/USDT <span class="text-green-500">▲ 2.4%</span></span> •
+                    <span class="mx-4">ETH/USDT <span class="text-green-500">▲ 1.1%</span></span> •
+                    <span class="mx-4">NIFTY 50 <span class="text-red-500">▼ 0.3%</span></span> •
+                    <span class="mx-4">RELIANCE <span class="text-green-500">▲ 1.8%</span></span> •
+                    <span class="mx-4">EUR/USD <span class="text-red-500">▼ 0.1%</span></span> •
+                    <span class="mx-4">USD/JPY <span class="text-green-500">▲ 0.5%</span></span> •
+                    <span class="mx-4">SOL/USDT <span class="text-green-500">▲ 5.2%</span></span>
+                </div>
+            </div>
+
+            <!-- Hero Section -->
             <div class="relative overflow-hidden">
                 <div class="absolute inset-0 z-0">
                     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.15)_0,rgba(10,10,10,1)_100%)]"></div>
                 </div>
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 pb-24 text-center lg:pt-32">
-                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16 pb-20 text-center lg:pt-28">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
                         The Encyclopedia of <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Modern Trading</span>
                     </h1>
                     <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 mb-10">
                         Tradeverse is your definitive hub for Cryptocurrencies, the National Stock Exchange of India (NSE), and Global Forex markets. Access live data, chat with peers, and consult our AI.
                     </p>
-                    <div class="flex justify-center gap-4">
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
                         <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_20px_rgba(234,179,8,0.3)]">Explore Markets</button>
-                        <button onclick="navigateTo('ai-chat')" class="px-8 py-4 bg-transparent border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg">Ask AI Analyst</button>
+                        <button onclick="navigateTo('ai-chat')" class="px-8 py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg">Ask AI Analyst</button>
                     </div>
                 </div>
             </div>
 
+            <!-- Ad Banner Section (Home) -->
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/30 p-8 flex flex-col md:flex-row items-center justify-between group cursor-pointer">
+                    <div class="absolute inset-0 bg-black opacity-20 group-hover:opacity-10 transition"></div>
+                    <div class="relative z-10 mb-4 md:mb-0">
+                        <span class="text-xs font-bold bg-blue-500 text-white px-2 py-1 rounded uppercase tracking-wider mb-2 inline-block">Sponsored</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Start Trading on Binance</h3>
+                        <p class="text-blue-200">Get up to $100 in welcome rewards when you sign up using our exclusive partner link.</p>
+                    </div>
+                    <button class="relative z-10 px-6 py-3 bg-yellow-400 text-black font-bold rounded hover:bg-yellow-300 transition whitespace-nowrap">Claim Reward <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+
             <!-- Features Grid -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
-                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                <h2 class="text-3xl font-bold text-center text-white mb-10 border-b border-dark-700 pb-4 inline-block mx-auto">Master Every Market</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-brands fa-bitcoin text-gold-500 text-3xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">Crypto Wiki</h3>
-                        <p class="text-gray-400">Deep dive into block-chain technologies, tokenomics, and real-time charts of leading digital assets.</p>
+                        <p class="text-gray-400">Deep dive into block-chain technologies, tokenomics, and real-time charts of leading digital assets. From BTC to altcoins.</p>
                     </div>
-                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
-                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-solid fa-building-columns text-gold-500 text-3xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">NSE India</h3>
-                        <p class="text-gray-400">Track India's booming economy. Analyze top equities from Nifty 50 to emerging mid-caps instantly.</p>
+                        <p class="text-gray-400">Track India's booming economy. Analyze top equities from Nifty 50 to emerging mid-caps instantly with precision tools.</p>
                     </div>
-                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
-                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-solid fa-money-bill-trend-up text-gold-500 text-3xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">Forex Hub</h3>
-                        <p class="text-gray-400">Monitor major and minor fiat pairs. Keep a pulse on global macroeconomic shifts affecting exchange rates.</p>
+                        <p class="text-gray-400">Monitor major and minor fiat pairs. Keep a pulse on global macroeconomic shifts affecting exchange rates 24/5.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="bg-dark-800 border-y border-gold-500/20 py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-bold text-center text-white mb-12">Trusted by Traders Worldwide</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
+                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <p class="text-gray-300 mb-4">"The AI Analyst feature is a game changer. It breaks down complex NSE earnings reports in seconds. Worth every penny of the Pro tier."</p>
+                            <div class="font-bold text-white">- Rahul M., Mumbai</div>
+                        </div>
+                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
+                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <p class="text-gray-300 mb-4">"I love having my crypto charts and forex pairs all in one tab. The UI is incredibly clean and fast. Tradeverse replaced three different apps for me."</p>
+                            <div class="font-bold text-white">- Sarah T., London</div>
+                        </div>
+                        <div class="bg-dark-900 p-6 rounded-xl border border-dark-700">
+                            <div class="flex text-gold-500 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                            <p class="text-gray-300 mb-4">"The community chat is highly active and strictly moderated. No spam, just pure technical analysis and fundamental news sharing."</p>
+                            <div class="font-bold text-white">- Alex K., Dubai</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- MARKETS PAGE -->
-        <section id="page-markets" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-80px)] flex flex-col">
+        <section id="page-markets" class="page-section hidden max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
             
-            <h2 class="text-3xl font-bold text-gold-500 mb-6"><i class="fa-solid fa-chart-pie mr-2"></i> Live Markets</h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gold-500"><i class="fa-solid fa-chart-pie mr-2"></i> Live Markets</h2>
+                <!-- Small ad in markets header -->
+                <div class="hidden md:block bg-dark-800 border border-dark-700 text-xs px-4 py-2 rounded text-gray-400">
+                    <span class="text-gold-500 font-bold">Ad:</span> Zero-fee crypto trading on <a href="#" class="text-blue-400 hover:underline">PartnerEx</a>
+                </div>
+            </div>
             
             <!-- Market Forums Toggle -->
-            <div class="flex space-x-2 mb-6 border-b border-dark-700 pb-2 overflow-x-auto">
+            <div class="flex space-x-2 mb-6 border-b border-dark-700 pb-2 overflow-x-auto custom-scrollbar">
                 <button onclick="switchMarket('crypto')" id="tab-crypto" class="market-tab active px-6 py-2 rounded-t-lg font-semibold transition whitespace-nowrap">Crypto Forum</button>
                 <button onclick="switchMarket('nse')" id="tab-nse" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">NSE Forum</button>
                 <button onclick="switchMarket('forex')" id="tab-forex" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">Forex Forum</button>
             </div>
 
             <!-- Asset Sub-toggles -->
-            <div id="asset-container" class="flex flex-wrap gap-3 mb-6">
+            <div id="asset-container" class="flex flex-wrap gap-2 mb-6 max-h-40 overflow-y-auto custom-scrollbar p-1">
                 <!-- Assets populated by JS -->
             </div>
 
-            <!-- Chart Container -->
-            <div class="flex-grow glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative" id="tv_chart_container">
-                <!-- TradingView Widget injects here -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Chart Container (Takes up 3/4 on large screens) -->
+                <div class="lg:col-span-3">
+                    <div class="glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative w-full h-[500px] sm:h-[600px] lg:h-[700px] shadow-lg" id="tv_chart_container">
+                        <!-- TradingView Widget injects here -->
+                    </div>
+                </div>
+
+                <!-- Market Specific News Section -->
+                <div class="lg:col-span-1 flex flex-col h-full">
+                    <div class="glass-panel rounded-xl border border-gold-500/20 p-4 h-full max-h-[700px] flex flex-col bg-dark-900/80">
+                        <h3 class="text-xl font-bold text-white border-b border-dark-700 pb-3 mb-4 flex items-center justify-between">
+                            <span><i class="fa-solid fa-newspaper text-gold-500 mr-2"></i> Market News</span>
+                            <span id="news-badge" class="text-xs bg-gold-500 text-dark-900 px-2 py-1 rounded font-bold">CRYPTO</span>
+                        </h3>
+                        
+                        <div id="news-container" class="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-grow">
+                            <!-- News articles injected by JS -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -320,9 +443,9 @@
                         <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Multiple Chart Layouts</li>
                         <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Priority AI Analyst Processing</li>
                         <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Exclusive VIP Discord/Chat</li>
-                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Custom Indicator Scripts</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Premium News Feeds</li>
                     </ul>
-                    <button onclick="initiatePayment(1499, 'Pro Trader Subscription')" class="w-full py-3 rounded-lg bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Subscribe Now</button>
+                    <button onclick="openPaymentModal('Pro Trader', 1499)" class="w-full py-3 rounded-lg bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Subscribe Now</button>
                 </div>
 
                 <!-- Institutional Tier -->
@@ -335,12 +458,20 @@
                         <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> 1-on-1 Trading Mentorship</li>
                         <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Algorithmic Trading Bot setup</li>
                     </ul>
-                    <button onclick="initiatePayment(9999, 'Institutional Subscription')" class="w-full py-3 rounded-lg border border-gold-500 text-gold-500 font-bold hover:bg-gold-500 hover:text-dark-900 transition">Contact Admin</button>
+                    <button onclick="openPaymentModal('Institutional', 9999)" class="w-full py-3 rounded-lg border border-gold-500 text-gold-500 font-bold hover:bg-gold-500 hover:text-dark-900 transition">Subscribe Now</button>
                 </div>
             </div>
         </section>
 
     </main>
+
+    <!-- Global Ad Banner Footer -->
+    <div class="bg-dark-900 border-t border-dark-700 py-4 text-center">
+        <p class="text-sm text-gray-400">
+            <span class="bg-dark-700 px-2 py-1 rounded text-xs mr-2 border border-dark-600">AD</span>
+            Protect your digital assets with <strong class="text-gold-400 cursor-pointer hover:underline">Ledger Hardware Wallets</strong>. Get 20% off today.
+        </p>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-black border-t border-dark-800 py-8 text-center text-gray-500 text-sm mt-auto">
@@ -380,7 +511,9 @@
 
             // Initialize specific page logic
             if (pageId === 'markets') {
-                if(!tvWidget) initTradingView('BINANCE:BTCUSDT'); // Default
+                if(!tvWidget) {
+                    switchMarket('crypto');
+                }
             }
         }
 
@@ -389,28 +522,79 @@
             menu.classList.toggle('hidden');
         }
 
-        /* --- MARKETS & CHARTS --- */
+        /* --- MARKETS, CHARTS & NEWS --- */
         const marketData = {
             crypto: [
                 { name: 'Bitcoin', symbol: 'BINANCE:BTCUSDT' },
                 { name: 'Ethereum', symbol: 'BINANCE:ETHUSDT' },
                 { name: 'Solana', symbol: 'BINANCE:SOLUSDT' },
                 { name: 'Cardano', symbol: 'BINANCE:ADAUSDT' },
-                { name: 'Dogecoin', symbol: 'BINANCE:DOGEUSDT' }
+                { name: 'Dogecoin', symbol: 'BINANCE:DOGEUSDT' },
+                { name: 'XRP', symbol: 'BINANCE:XRPUSDT' },
+                { name: 'Polkadot', symbol: 'BINANCE:DOTUSDT' },
+                { name: 'Polygon', symbol: 'BINANCE:MATICUSDT' },
+                { name: 'Chainlink', symbol: 'BINANCE:LINKUSDT' },
+                { name: 'BNB', symbol: 'BINANCE:BNBUSDT' },
+                { name: 'Avalanche', symbol: 'BINANCE:AVAXUSDT' },
+                { name: 'Uniswap', symbol: 'BINANCE:UNIUSDT' },
+                { name: 'Cosmos', symbol: 'BINANCE:ATOMUSDT' },
+                { name: 'Litecoin', symbol: 'BINANCE:LTCUSDT' },
+                { name: 'Shiba Inu', symbol: 'BINANCE:SHIBUSDT' }
             ],
             nse: [
                 { name: 'Reliance', symbol: 'BSE:RELIANCE' },
                 { name: 'TCS', symbol: 'BSE:TCS' },
                 { name: 'HDFC Bank', symbol: 'BSE:HDFCBANK' },
                 { name: 'Infosys', symbol: 'BSE:INFY' },
-                { name: 'Tata Motors', symbol: 'BSE:TATAMOTORS' }
+                { name: 'Tata Motors', symbol: 'BSE:TATAMOTORS' },
+                { name: 'ICICI Bank', symbol: 'BSE:ICICIBANK' },
+                { name: 'SBI', symbol: 'BSE:SBIN' },
+                { name: 'Bharti Airtel', symbol: 'BSE:BHARTIARTL' },
+                { name: 'ITC', symbol: 'BSE:ITC' },
+                { name: 'Kotak Bank', symbol: 'BSE:KOTAKBANK' },
+                { name: 'Larsen & Toubro', symbol: 'BSE:LT' },
+                { name: 'HUL', symbol: 'BSE:HINDUNILVR' },
+                { name: 'Axis Bank', symbol: 'BSE:AXISBANK' },
+                { name: 'Bajaj Finance', symbol: 'BSE:BAJFINANCE' },
+                { name: 'Asian Paints', symbol: 'BSE:ASIANPAINT' }
             ],
             forex: [
                 { name: 'EUR/USD', symbol: 'FX:EURUSD' },
                 { name: 'GBP/USD', symbol: 'FX:GBPUSD' },
                 { name: 'USD/JPY', symbol: 'FX:USDJPY' },
                 { name: 'AUD/USD', symbol: 'FX:AUDUSD' },
-                { name: 'USD/CAD', symbol: 'FX:USDCAD' }
+                { name: 'USD/CAD', symbol: 'FX:USDCAD' },
+                { name: 'USD/CHF', symbol: 'FX:USDCHF' },
+                { name: 'NZD/USD', symbol: 'FX:NZDUSD' },
+                { name: 'EUR/GBP', symbol: 'FX:EURGBP' },
+                { name: 'EUR/JPY', symbol: 'FX:EURJPY' },
+                { name: 'GBP/JPY', symbol: 'FX:GBPJPY' },
+                { name: 'AUD/JPY', symbol: 'FX:AUDJPY' },
+                { name: 'EUR/CHF', symbol: 'FX:EURCHF' }
+            ]
+        };
+
+        const newsData = {
+            crypto: [
+                { title: "Bitcoin Surges Past Key Resistance Level on Institutional Buying", time: "2 hours ago", source: "CoinTelegraph" },
+                { title: "Ethereum Gas Fees Hit Yearly Low Following Dencun Upgrade", time: "4 hours ago", source: "Decrypt" },
+                { title: "Solana DeFi TVL Crosses $5 Billion Mark Amid Airdrop Season", time: "5 hours ago", source: "Blockworks" },
+                { title: "SEC Delays Decision on Spot Altcoin ETF Applications", time: "8 hours ago", source: "CryptoSlate" },
+                { title: "Major Crypto Exchange Announces Expansion into European Markets", time: "12 hours ago", source: "CoinDesk" }
+            ],
+            nse: [
+                { title: "RBI Holds Repo Rate Steady at 6.5%, Focuses on Inflation", time: "1 hour ago", source: "Economic Times" },
+                { title: "Reliance Industries Unveils Ambitious Green Energy Gigafactory Plan", time: "3 hours ago", source: "Moneycontrol" },
+                { title: "TCS Bags Multi-Million Dollar Deal from European Retail Giant", time: "5 hours ago", source: "Mint" },
+                { title: "Nifty 50 Hits Fresh All-Time High Led by Banking and Auto Stocks", time: "7 hours ago", source: "CNBC TV18" },
+                { title: "Tata Motors EV Sales Surge 40% Year-on-Year in Latest Quarter", time: "10 hours ago", source: "Business Standard" }
+            ],
+            forex: [
+                { title: "Fed Chair Jerome Powell Signals Potential Rate Cuts by Q3", time: "1 hour ago", source: "Reuters" },
+                { title: "ECB Maintains Hawkish Stance Despite Slight Drop in Eurozone Inflation", time: "3 hours ago", source: "Bloomberg" },
+                { title: "Bank of Japan Considers Ending Negative Interest Rate Policy", time: "6 hours ago", source: "Financial Times" },
+                { title: "US Dollar Index (DXY) Weakens Amid Dovish Federal Reserve Commentary", time: "9 hours ago", source: "FXStreet" },
+                { title: "GBP/USD Volatile as UK Jobs Report Shows Unexpected Wage Growth", time: "11 hours ago", source: "DailyFX" }
             ]
         };
 
@@ -424,13 +608,16 @@
             activeTab.classList.add('active');
             activeTab.classList.remove('text-gray-400');
             
+            // Update News Badge
+            document.getElementById('news-badge').innerText = marketType.toUpperCase();
+
             // Populate Assets
             const container = document.getElementById('asset-container');
             container.innerHTML = '';
             
             marketData[marketType].forEach((asset, index) => {
                 const btn = document.createElement('button');
-                btn.className = `asset-btn px-4 py-1.5 rounded-full text-sm font-medium border border-dark-700 bg-dark-800 text-gray-300 hover:border-gold-500 hover:text-gold-400 transition ${index === 0 ? 'active' : ''}`;
+                btn.className = `asset-btn px-4 py-2 mb-2 mr-2 rounded text-sm font-medium border border-dark-700 bg-dark-800 text-gray-300 hover:border-gold-500 hover:text-gold-400 transition whitespace-nowrap ${index === 0 ? 'active' : ''}`;
                 btn.innerText = asset.name;
                 btn.onclick = () => {
                     document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
@@ -440,6 +627,23 @@
                 container.appendChild(btn);
             });
 
+            // Populate News
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
+            
+            newsData[marketType].forEach(news => {
+                const newsHTML = `
+                    <div class="news-card bg-dark-800 border border-dark-700 p-4 rounded-lg cursor-pointer transition-all duration-300">
+                        <h4 class="text-sm font-bold text-gray-200 mb-2 leading-tight">${news.title}</h4>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span><i class="fa-regular fa-clock mr-1"></i> ${news.time}</span>
+                            <span class="font-semibold text-gold-600">${news.source}</span>
+                        </div>
+                    </div>
+                `;
+                newsContainer.insertAdjacentHTML('beforeend', newsHTML);
+            });
+
             // Load first asset chart by default
             if(marketData[marketType].length > 0) {
                 initTradingView(marketData[marketType][0].symbol);
@@ -447,9 +651,7 @@
         }
 
         function initTradingView(symbolStr) {
-            // Replace old widget
             document.getElementById('tv_chart_container').innerHTML = '';
-            
             tvWidget = new TradingView.widget({
                 "autosize": true,
                 "symbol": symbolStr,
@@ -469,9 +671,6 @@
             });
         }
 
-        // Initialize markets on load behind scenes
-        switchMarket('crypto');
-
 
         /* --- COMMUNITY CHAT --- */
         function sendCommunityMessage(e) {
@@ -481,7 +680,6 @@
             if(!msg) return;
 
             const chatContainer = document.getElementById('community-messages');
-            
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
             const msgHTML = `
@@ -522,7 +720,7 @@
             }, 1500);
         }
 
-        /* --- AI CHATBOT (GEMINI INTEGRATION) --- */
+        /* --- AI CHATBOT --- */
         async function fetchWithRetry(url, options, retries = 5) {
             const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < retries; i++) {
@@ -650,53 +848,33 @@
             }
         }
 
-        /* --- RAZORPAY SUBSCRIPTION --- */
-        function initiatePayment(amountInINR, planName) {
-            // Amount is in paise (₹1 = 100 paise)
-            const amountInPaise = amountInINR * 100;
-
-            const options = {
-                "key": "rzp_test_mockkey", // Replace with real Razorpay Key in production
-                "amount": amountInPaise.toString(),
-                "currency": "INR",
-                "name": "Tradeverse",
-                "description": planName,
-                "image": "https://img.icons8.com/color/48/000000/bullish.png", // Mock logo
-                // "order_id": "order_IluGWxBm9U8zJ8", // Needs server-side generation
-                "handler": function (response){
-                    // This executes on success
-                    showModal(`Successfully subscribed to ${planName}!\nPayment ID: ` + response.razorpay_payment_id, "Payment Successful");
-                },
-                "prefill": {
-                    "name": "Trader",
-                    "email": "trader@example.com",
-                    "contact": "9999999999"
-                },
-                "theme": {
-                    "color": "#eab308" // Tradeverse Gold
-                }
-            };
-
-            // Since we don't have a backend to generate a real order_id for this demo, 
-            // Razorpay checkout might fail in real-world without an order_id. 
-            // We will attempt to open it, and fallback to our custom modal to simulate success for the demo.
-            
-            try {
-                if (typeof Razorpay !== 'undefined') {
-                    const rzp1 = new Razorpay(options);
-                    rzp1.on('payment.failed', function (response){
-                        showModal("Payment Failed or Cancelled. Reason: " + response.error.description, "Payment Error");
-                    });
-                    rzp1.open();
-                } else {
-                    throw new Error("Razorpay SDK not loaded.");
-                }
-            } catch (e) {
-                console.warn("Razorpay mock fallback used due to missing backend order_id or SDK.", e);
-                // Demo fallback simulation
-                showModal(`[Demo Mode] Successfully subscribed to ${planName}!`, "Subscription Activated");
-            }
+        /* --- RAZORPAY MOCK SIMULATION --- */
+        // Since Razorpay JS strict requires a valid backend `order_id` to open, 
+        // we use a fully simulated frontend UI to demonstrate the flow.
+        function openPaymentModal(planName, amount) {
+            document.getElementById('pay-plan-name').innerText = planName;
+            document.getElementById('pay-plan-amount').innerText = "₹" + amount.toLocaleString();
+            document.getElementById('payment-modal').classList.remove('hidden');
         }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('payment-actions').classList.remove('hidden');
+            document.getElementById('payment-processing').classList.add('hidden');
+        }
+
+        function processMockPayment() {
+            document.getElementById('payment-actions').classList.add('hidden');
+            document.getElementById('payment-processing').classList.remove('hidden');
+            
+            // Simulate network delay for payment gateway
+            setTimeout(() => {
+                closePaymentModal();
+                const fakePaymentId = "pay_" + Math.random().toString(36).substr(2, 14);
+                showModal(`Payment Successful!\nTransaction ID: ${fakePaymentId}\n\nWelcome to Tradeverse Premium.`, "Subscription Activated");
+            }, 2500);
+        }
+
     </script>
 </body>
 </html>
