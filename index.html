@@ -1,1 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradeverse | The Ultimate Trading Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        dark: {
+                            900: '#0a0a0a',
+                            800: '#171717',
+                            700: '#262626'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            background-color: #0a0a0a;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
 
+        /* Custom Scrollbar in Gold/Black */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ca8a04;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #eab308;
+        }
+
+        .nav-link.active {
+            color: #facc15;
+            border-bottom: 2px solid #facc15;
+        }
+
+        .market-tab.active {
+            background-color: #eab308;
+            color: #0a0a0a;
+        }
+        
+        .asset-btn.active {
+            border-color: #facc15;
+            color: #facc15;
+        }
+
+        .glass-panel {
+            background: rgba(23, 23, 23, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+        }
+
+        /* Typing Indicator Animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Global Message Modal (replaces alert) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80">
+        <div class="glass-panel p-8 rounded-xl max-w-sm w-full text-center border-gold-500 border">
+            <h3 id="modal-title" class="text-2xl font-bold text-gold-400 mb-4">Notice</h3>
+            <p id="modal-message" class="text-gray-300 mb-6"></p>
+            <button onclick="closeModal()" class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition">OK</button>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 glass-panel border-b-0 border-gold-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <i class="fa-solid fa-chart-line text-gold-500 text-3xl mr-3"></i>
+                    <span class="text-2xl font-bold tracking-wider text-white">TRADE<span class="text-gold-500">VERSE</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <button onclick="navigateTo('home')" class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="home">Home</button>
+                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Markets</button>
+                        <button onclick="navigateTo('community')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="community">Community</button>
+                        <button onclick="navigateTo('ai-chat')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="ai-chat">AI Analyst</button>
+                        <button onclick="navigateTo('premium')" class="px-4 py-2 rounded-md text-sm font-bold bg-gold-600 text-dark-900 hover:bg-gold-500 transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Premium</button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gold-500 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gold-500/30">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
+                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
+                <button onclick="navigateTo('community'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Community</button>
+                <button onclick="navigateTo('ai-chat'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">AI Analyst</button>
+                <button onclick="navigateTo('premium'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-bold text-gold-500">Premium</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        
+        <!-- HOME PAGE -->
+        <section id="page-home" class="page-section">
+            <div class="relative overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.15)_0,rgba(10,10,10,1)_100%)]"></div>
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20 pb-24 text-center lg:pt-32">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+                        The Encyclopedia of <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Modern Trading</span>
+                    </h1>
+                    <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 mb-10">
+                        Tradeverse is your definitive hub for Cryptocurrencies, the National Stock Exchange of India (NSE), and Global Forex markets. Access live data, chat with peers, and consult our AI.
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_20px_rgba(234,179,8,0.3)]">Explore Markets</button>
+                        <button onclick="navigateTo('ai-chat')" class="px-8 py-4 bg-transparent border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg">Ask AI Analyst</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+                            <i class="fa-brands fa-bitcoin text-gold-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Crypto Wiki</h3>
+                        <p class="text-gray-400">Deep dive into block-chain technologies, tokenomics, and real-time charts of leading digital assets.</p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+                            <i class="fa-solid fa-building-columns text-gold-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">NSE India</h3>
+                        <p class="text-gray-400">Track India's booming economy. Analyze top equities from Nifty 50 to emerging mid-caps instantly.</p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2">
+                        <div class="w-16 h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-6">
+                            <i class="fa-solid fa-money-bill-trend-up text-gold-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Forex Hub</h3>
+                        <p class="text-gray-400">Monitor major and minor fiat pairs. Keep a pulse on global macroeconomic shifts affecting exchange rates.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARKETS PAGE -->
+        <section id="page-markets" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-80px)] flex flex-col">
+            
+            <h2 class="text-3xl font-bold text-gold-500 mb-6"><i class="fa-solid fa-chart-pie mr-2"></i> Live Markets</h2>
+            
+            <!-- Market Forums Toggle -->
+            <div class="flex space-x-2 mb-6 border-b border-dark-700 pb-2 overflow-x-auto">
+                <button onclick="switchMarket('crypto')" id="tab-crypto" class="market-tab active px-6 py-2 rounded-t-lg font-semibold transition whitespace-nowrap">Crypto Forum</button>
+                <button onclick="switchMarket('nse')" id="tab-nse" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">NSE Forum</button>
+                <button onclick="switchMarket('forex')" id="tab-forex" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">Forex Forum</button>
+            </div>
+
+            <!-- Asset Sub-toggles -->
+            <div id="asset-container" class="flex flex-wrap gap-3 mb-6">
+                <!-- Assets populated by JS -->
+            </div>
+
+            <!-- Chart Container -->
+            <div class="flex-grow glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative" id="tv_chart_container">
+                <!-- TradingView Widget injects here -->
+            </div>
+        </section>
+
+        <!-- COMMUNITY CHAT PAGE -->
+        <section id="page-community" class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-80px)]">
+            <div class="glass-panel border border-gold-500/30 rounded-2xl h-full flex flex-col">
+                <div class="p-4 border-b border-gold-500/30 bg-dark-800/50 rounded-t-2xl flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-white"><i class="fa-solid fa-users text-gold-500 mr-2"></i> Tradeverse Community</h2>
+                    <span class="text-xs font-semibold px-2 py-1 bg-green-500/20 text-green-400 rounded-full">● 1,204 Online</span>
+                </div>
+                
+                <div id="community-messages" class="flex-grow p-6 overflow-y-auto space-y-4">
+                    <!-- Chat messages -->
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold mr-3 border border-gray-600">JD</div>
+                        <div>
+                            <div class="bg-dark-700 px-4 py-2 rounded-2xl rounded-tl-none">
+                                <span class="text-xs text-gold-400 font-bold block mb-1">John Doe</span>
+                                <p class="text-sm">Anyone tracking the Reliance breakout on the daily chart? Looks promising.</p>
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1 ml-1">10:42 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center font-bold mr-3 border border-gray-600">AT</div>
+                        <div>
+                            <div class="bg-dark-700 px-4 py-2 rounded-2xl rounded-tl-none">
+                                <span class="text-xs text-gold-400 font-bold block mb-1">CryptoNinja</span>
+                                <p class="text-sm">BTC is consolidating below $65k. Waiting for volume to pick up before longing.</p>
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1 ml-1">10:45 AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 border-t border-gold-500/30 bg-dark-800/50 rounded-b-2xl">
+                    <form id="community-form" class="flex gap-2" onsubmit="sendCommunityMessage(event)">
+                        <input type="text" id="community-input" class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-gold-500 transition" placeholder="Share your market insights..." required>
+                        <button type="submit" class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-6 py-3 rounded-lg transition"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI CHATBOT PAGE -->
+        <section id="page-ai-chat" class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-80px)]">
+            <div class="glass-panel border border-gold-500/50 rounded-2xl h-full flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.1)]">
+                <div class="p-5 border-b border-gold-500/30 bg-dark-800/80 rounded-t-2xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center border-2 border-white shadow-[0_0_10px_rgba(234,179,8,0.5)]">
+                        <i class="fa-solid fa-robot text-dark-900 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Tradeverse AI Expert</h2>
+                        <p class="text-xs text-gold-400">Powered by Gemini AI • Always active</p>
+                    </div>
+                </div>
+                
+                <div id="ai-messages" class="flex-grow p-6 overflow-y-auto space-y-6">
+                    <!-- AI Welcome Message -->
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-3 mt-1">
+                            <i class="fa-solid fa-robot text-dark-900 text-xs"></i>
+                        </div>
+                        <div class="bg-dark-800 border border-gold-500/20 text-gray-200 px-5 py-3 rounded-2xl rounded-tl-none max-w-[80%] leading-relaxed">
+                            Hello! I am the Tradeverse AI Analyst. I can answer questions about Cryptocurrency fundamentals, NSE stock histories, Forex concepts, and general trading strategies. How can I assist your trading journey today?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 border-t border-gold-500/30 bg-dark-800/50 rounded-b-2xl">
+                    <form id="ai-form" class="flex gap-2" onsubmit="sendAiMessage(event)">
+                        <input type="text" id="ai-input" class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition" placeholder="Ask about stocks, crypto, or trading strategies..." required>
+                        <button type="submit" id="ai-submit-btn" class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-6 py-3 rounded-lg transition flex items-center gap-2">
+                            <span>Ask AI</span>
+                            <i class="fa-solid fa-sparkles"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- PREMIUM PAGE -->
+        <section id="page-premium" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-extrabold text-white mb-4">Elevate Your Trading Edge</h2>
+                <p class="text-xl text-gray-400">Join the Tradeverse Elite. Get advanced indicators, priority AI access, and exclusive forum channels.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Basic Tier -->
+                <div class="glass-panel rounded-2xl p-8 border border-dark-700 flex flex-col">
+                    <h3 class="text-2xl font-bold text-gray-300 mb-2">Retail Trader</h3>
+                    <div class="text-4xl font-bold text-white mb-6">₹0 <span class="text-lg text-gray-500 font-normal">/mo</span></div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Basic Live Charts</li>
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Public Community Chat</li>
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Standard AI Access</li>
+                    </ul>
+                    <button class="w-full py-3 rounded-lg border border-gray-600 text-gray-300 font-bold bg-dark-800 cursor-not-allowed">Current Plan</button>
+                </div>
+
+                <!-- Pro Tier (Gold) -->
+                <div class="glass-panel rounded-2xl p-8 border-2 border-gold-500 relative transform md:-translate-y-4 flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gold-500 text-dark-900 px-4 py-1 rounded-full text-sm font-bold tracking-wide">MOST POPULAR</div>
+                    <h3 class="text-2xl font-bold text-gold-400 mb-2">Pro Trader</h3>
+                    <div class="text-4xl font-bold text-white mb-6">₹1,499 <span class="text-lg text-gray-500 font-normal">/mo</span></div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Multiple Chart Layouts</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Priority AI Analyst Processing</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Exclusive VIP Discord/Chat</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Custom Indicator Scripts</li>
+                    </ul>
+                    <button onclick="initiatePayment(1499, 'Pro Trader Subscription')" class="w-full py-3 rounded-lg bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Subscribe Now</button>
+                </div>
+
+                <!-- Institutional Tier -->
+                <div class="glass-panel rounded-2xl p-8 border border-dark-700 flex flex-col">
+                    <h3 class="text-2xl font-bold text-gray-300 mb-2">Institutional</h3>
+                    <div class="text-4xl font-bold text-white mb-6">₹9,999 <span class="text-lg text-gray-500 font-normal">/mo</span></div>
+                    <ul class="space-y-4 mb-8 flex-grow">
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Everything in Pro</li>
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Direct API Access</li>
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> 1-on-1 Trading Mentorship</li>
+                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Algorithmic Trading Bot setup</li>
+                    </ul>
+                    <button onclick="initiatePayment(9999, 'Institutional Subscription')" class="w-full py-3 rounded-lg border border-gold-500 text-gold-500 font-bold hover:bg-gold-500 hover:text-dark-900 transition">Contact Admin</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-dark-800 py-8 text-center text-gray-500 text-sm mt-auto">
+        <p>&copy; 2026 Tradeverse. All Rights Reserved.</p>
+        <p class="mt-2 text-xs">Trading involves high risk. This platform is for educational purposes only.</p>
+    </footer>
+
+    <script>
+        /* --- GLOBAL & UTILS --- */
+        const apiKey = ""; // API key injected by environment
+        let tvWidget = null;
+
+        function showModal(message, title = "Notice") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        /* --- NAVIGATION --- */
+        function navigateTo(pageId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+            // Show target section
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('data-target') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Initialize specific page logic
+            if (pageId === 'markets') {
+                if(!tvWidget) initTradingView('BINANCE:BTCUSDT'); // Default
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* --- MARKETS & CHARTS --- */
+        const marketData = {
+            crypto: [
+                { name: 'Bitcoin', symbol: 'BINANCE:BTCUSDT' },
+                { name: 'Ethereum', symbol: 'BINANCE:ETHUSDT' },
+                { name: 'Solana', symbol: 'BINANCE:SOLUSDT' },
+                { name: 'Cardano', symbol: 'BINANCE:ADAUSDT' },
+                { name: 'Dogecoin', symbol: 'BINANCE:DOGEUSDT' }
+            ],
+            nse: [
+                { name: 'Reliance', symbol: 'BSE:RELIANCE' },
+                { name: 'TCS', symbol: 'BSE:TCS' },
+                { name: 'HDFC Bank', symbol: 'BSE:HDFCBANK' },
+                { name: 'Infosys', symbol: 'BSE:INFY' },
+                { name: 'Tata Motors', symbol: 'BSE:TATAMOTORS' }
+            ],
+            forex: [
+                { name: 'EUR/USD', symbol: 'FX:EURUSD' },
+                { name: 'GBP/USD', symbol: 'FX:GBPUSD' },
+                { name: 'USD/JPY', symbol: 'FX:USDJPY' },
+                { name: 'AUD/USD', symbol: 'FX:AUDUSD' },
+                { name: 'USD/CAD', symbol: 'FX:USDCAD' }
+            ]
+        };
+
+        function switchMarket(marketType) {
+            // Update Tabs UI
+            document.querySelectorAll('.market-tab').forEach(tab => {
+                tab.classList.remove('active', 'text-dark-900', 'bg-gold-500');
+                tab.classList.add('text-gray-400');
+            });
+            const activeTab = document.getElementById(`tab-${marketType}`);
+            activeTab.classList.add('active');
+            activeTab.classList.remove('text-gray-400');
+            
+            // Populate Assets
+            const container = document.getElementById('asset-container');
+            container.innerHTML = '';
+            
+            marketData[marketType].forEach((asset, index) => {
+                const btn = document.createElement('button');
+                btn.className = `asset-btn px-4 py-1.5 rounded-full text-sm font-medium border border-dark-700 bg-dark-800 text-gray-300 hover:border-gold-500 hover:text-gold-400 transition ${index === 0 ? 'active' : ''}`;
+                btn.innerText = asset.name;
+                btn.onclick = () => {
+                    document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    initTradingView(asset.symbol);
+                };
+                container.appendChild(btn);
+            });
+
+            // Load first asset chart by default
+            if(marketData[marketType].length > 0) {
+                initTradingView(marketData[marketType][0].symbol);
+            }
+        }
+
+        function initTradingView(symbolStr) {
+            // Replace old widget
+            document.getElementById('tv_chart_container').innerHTML = '';
+            
+            tvWidget = new TradingView.widget({
+                "autosize": true,
+                "symbol": symbolStr,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "enable_publishing": false,
+                "backgroundColor": "rgba(10, 10, 10, 1)",
+                "gridColor": "rgba(38, 38, 38, 1)",
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "save_image": false,
+                "container_id": "tv_chart_container",
+                "toolbar_bg": "#0a0a0a"
+            });
+        }
+
+        // Initialize markets on load behind scenes
+        switchMarket('crypto');
+
+
+        /* --- COMMUNITY CHAT --- */
+        function sendCommunityMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('community-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const chatContainer = document.getElementById('community-messages');
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const msgHTML = `
+                <div class="flex items-start mb-4 justify-end">
+                    <div class="text-right">
+                        <div class="bg-gold-600 text-dark-900 px-4 py-2 rounded-2xl rounded-tr-none inline-block max-w-xs text-left">
+                            <p class="text-sm font-medium">${msg}</p>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 mr-1 block">${time}</span>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-dark-700 flex items-center justify-center font-bold ml-3 border border-gold-500 text-gold-500">YOU</div>
+                </div>
+            `;
+            
+            chatContainer.insertAdjacentHTML('beforeend', msgHTML);
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simulate random response
+            setTimeout(() => {
+                const replies = ["Agreed.", "Let's watch the volume.", "Bullish patterns forming.", "Careful with the resistance level here."];
+                const reply = replies[Math.floor(Math.random() * replies.length)];
+                
+                const replyHTML = `
+                <div class="flex items-start mb-4">
+                    <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center font-bold mr-3 border border-gray-600 text-white">TR</div>
+                    <div>
+                        <div class="bg-dark-700 px-4 py-2 rounded-2xl rounded-tl-none">
+                            <span class="text-xs text-gold-400 font-bold block mb-1">Trader_X</span>
+                            <p class="text-sm">${reply}</p>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 ml-1">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', replyHTML);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1500);
+        }
+
+        /* --- AI CHATBOT (GEMINI INTEGRATION) --- */
+        async function fetchWithRetry(url, options, retries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        const errBody = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status}, body: ${errBody}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        async function sendAiMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const userText = input.value.trim();
+            if(!userText) return;
+
+            const chatContainer = document.getElementById('ai-messages');
+            const submitBtn = document.getElementById('ai-submit-btn');
+            
+            // Append User Message
+            const userMsgHTML = `
+                <div class="flex items-start justify-end mb-4">
+                    <div class="bg-dark-700 border border-gold-500/50 text-white px-5 py-3 rounded-2xl rounded-tr-none max-w-[80%]">
+                        ${userText}
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-dark-800 flex-shrink-0 flex items-center justify-center ml-3 mt-1 border border-gold-500 text-gold-500 text-xs font-bold">
+                        YOU
+                    </div>
+                </div>
+            `;
+            chatContainer.insertAdjacentHTML('beforeend', userMsgHTML);
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Loading indicator
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i>`;
+            
+            const loadingId = 'loading-' + Date.now();
+            const loadingHTML = `
+                <div id="${loadingId}" class="flex items-start mb-4">
+                    <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-3 mt-1">
+                        <i class="fa-solid fa-robot text-dark-900 text-xs"></i>
+                    </div>
+                    <div class="bg-dark-800 border border-gold-500/20 px-5 py-4 rounded-2xl rounded-tl-none flex gap-1 items-center h-[46px]">
+                        <div class="w-2 h-2 bg-gold-500 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gold-500 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gold-500 rounded-full typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatContainer.insertAdjacentHTML('beforeend', loadingHTML);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const systemPrompt = "You are the Tradeverse AI Analyst, an expert financial advisor for a platform that tracks Crypto, the Indian NSE, and Forex. Provide concise, professional, and analytical answers. Format text with markdown if needed, but keep it readable in HTML. Never provide guaranteed financial advice.";
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userText }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    tools: [{ "google_search": {} }]
+                };
+
+                const response = await fetchWithRetry(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                let aiResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                if(!aiResponseText) throw new Error("Empty response from AI");
+
+                // Basic markdown to HTML (bolding and line breaks)
+                aiResponseText = aiResponseText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400">$1</strong>');
+                aiResponseText = aiResponseText.replace(/\n/g, '<br/>');
+
+                document.getElementById(loadingId).remove();
+                
+                const aiMsgHTML = `
+                    <div class="flex items-start mb-4">
+                        <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-3 mt-1">
+                            <i class="fa-solid fa-robot text-dark-900 text-xs"></i>
+                        </div>
+                        <div class="bg-dark-800 border border-gold-500/20 text-gray-200 px-5 py-3 rounded-2xl rounded-tl-none max-w-[80%] leading-relaxed text-sm">
+                            ${aiResponseText}
+                        </div>
+                    </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', aiMsgHTML);
+
+            } catch (error) {
+                console.error("AI Error:", error);
+                document.getElementById(loadingId).remove();
+                
+                let errorMsg = "I'm having trouble connecting to my analysis servers right now. Please try again later.";
+                if(error.message.includes("API key")) {
+                    errorMsg = "API configuration error. The platform requires a valid runtime API key to process AI requests.";
+                }
+
+                const aiErrorHTML = `
+                    <div class="flex items-start mb-4">
+                        <div class="w-8 h-8 rounded-full bg-red-500 flex-shrink-0 flex items-center justify-center mr-3 mt-1">
+                            <i class="fa-solid fa-triangle-exclamation text-white text-xs"></i>
+                        </div>
+                        <div class="bg-red-900/20 border border-red-500/50 text-red-200 px-5 py-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">
+                            ${errorMsg}
+                        </div>
+                    </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', aiErrorHTML);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>Ask AI</span><i class="fa-solid fa-sparkles"></i>`;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        /* --- RAZORPAY SUBSCRIPTION --- */
+        function initiatePayment(amountInINR, planName) {
+            // Amount is in paise (₹1 = 100 paise)
+            const amountInPaise = amountInINR * 100;
+
+            const options = {
+                "key": "rzp_test_mockkey", // Replace with real Razorpay Key in production
+                "amount": amountInPaise.toString(),
+                "currency": "INR",
+                "name": "Tradeverse",
+                "description": planName,
+                "image": "https://img.icons8.com/color/48/000000/bullish.png", // Mock logo
+                // "order_id": "order_IluGWxBm9U8zJ8", // Needs server-side generation
+                "handler": function (response){
+                    // This executes on success
+                    showModal(`Successfully subscribed to ${planName}!\nPayment ID: ` + response.razorpay_payment_id, "Payment Successful");
+                },
+                "prefill": {
+                    "name": "Trader",
+                    "email": "trader@example.com",
+                    "contact": "9999999999"
+                },
+                "theme": {
+                    "color": "#eab308" // Tradeverse Gold
+                }
+            };
+
+            // Since we don't have a backend to generate a real order_id for this demo, 
+            // Razorpay checkout might fail in real-world without an order_id. 
+            // We will attempt to open it, and fallback to our custom modal to simulate success for the demo.
+            
+            try {
+                if (typeof Razorpay !== 'undefined') {
+                    const rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response){
+                        showModal("Payment Failed or Cancelled. Reason: " + response.error.description, "Payment Error");
+                    });
+                    rzp1.open();
+                } else {
+                    throw new Error("Razorpay SDK not loaded.");
+                }
+            } catch (e) {
+                console.warn("Razorpay mock fallback used due to missing backend order_id or SDK.", e);
+                // Demo fallback simulation
+                showModal(`[Demo Mode] Successfully subscribed to ${planName}!`, "Subscription Activated");
+            }
+        }
+    </script>
+</body>
+</html>
