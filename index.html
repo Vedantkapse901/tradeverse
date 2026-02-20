@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tradeverse | The Ultimate Trading Hub</title>
+    <title>📈 Tradeverse | The Ultimate Trading Hub</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -49,9 +50,10 @@
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar in Gold/Black */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
             background: #0a0a0a;
@@ -74,10 +76,17 @@
             color: #0a0a0a;
         }
         
-        .asset-btn.active {
-            border-color: #facc15;
-            color: #facc15;
-            background-color: rgba(234, 179, 8, 0.1);
+        /* Messari Table Row Hover */
+        .asset-row {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .asset-row:hover {
+            background-color: rgba(234, 179, 8, 0.05);
+        }
+        .asset-row.active {
+            background-color: rgba(234, 179, 8, 0.15);
+            border-left: 3px solid #facc15;
         }
 
         .glass-panel {
@@ -107,11 +116,24 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="fixed bottom-0 w-full glass-panel border-t border-gold-500/50 p-4 z-50 transform translate-y-full transition-transform duration-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-sm text-gray-300">
+                <strong class="text-gold-400"><i class="fa-solid fa-cookie-bite mr-2"></i>Privacy & Cookies:</strong> We use cookies and AI diagnostics to analyze site traffic and improve your trading experience. By continuing, you consent to our privacy policy.
+            </div>
+            <div class="flex gap-3 whitespace-nowrap">
+                <button onclick="acceptCookies()" class="bg-gold-500 hover:bg-gold-400 text-dark-900 px-5 py-2 rounded font-bold transition">Accept All</button>
+                <button onclick="acceptCookies()" class="bg-dark-700 hover:bg-dark-600 text-gray-300 border border-dark-600 px-5 py-2 rounded transition">Decline</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Global Message Modal -->
     <div id="custom-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity">
-        <div class="glass-panel p-8 rounded-xl max-w-sm w-full text-center border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+        <div class="glass-panel p-8 rounded-xl max-w-md w-full text-center border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
             <h3 id="modal-title" class="text-2xl font-bold text-gold-400 mb-4">Notice</h3>
-            <p id="modal-message" class="text-gray-300 mb-6"></p>
+            <div id="modal-message" class="text-gray-300 mb-6 text-left leading-relaxed max-h-[60vh] overflow-y-auto pr-2"></div>
             <button onclick="closeModal()" class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition w-full">OK</button>
         </div>
     </div>
@@ -146,9 +168,68 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel p-8 rounded-xl max-w-sm w-full border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+            <h3 class="text-2xl font-bold text-white mb-2">Trader Login</h3>
+            <p class="text-sm text-gray-400 mb-6">Access your live portfolio.</p>
+            <form onsubmit="processLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Username</label>
+                    <input type="text" id="login-username" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500" required placeholder="e.g. Satoshi123">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Password</label>
+                    <input type="password" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500" required placeholder="••••••••">
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="submit" class="flex-grow bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold py-2 rounded transition">Login</button>
+                    <button type="button" onclick="toggleLoginModal()" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="deposit-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel p-8 rounded-xl max-w-sm w-full border-green-500 border shadow-[0_0_30px_rgba(34,197,94,0.2)]">
+            <h3 class="text-2xl font-bold text-white mb-2">Deposit Funds</h3>
+            <p class="text-sm text-gray-400 mb-6">Add capital to your trading account.</p>
+            <form onsubmit="processDeposit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Amount (₹)</label>
+                    <input type="number" id="deposit-amount" min="100" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-green-500" required placeholder="50000">
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="submit" class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">Confirm Deposit</button>
+                    <button type="button" onclick="toggleDepositModal()" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Trade Execution Modal -->
+    <div id="trade-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel p-8 rounded-xl max-w-sm w-full border-blue-500 border shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+            <h3 id="trade-asset-title" class="text-2xl font-bold text-white mb-1">Trade Asset</h3>
+            <p id="trade-asset-price" class="text-sm text-gold-400 mb-6 font-semibold">Current Price: --</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Order Value (₹)</label>
+                    <input type="number" id="trade-amount" min="10" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-3 text-lg focus:outline-none focus:border-blue-500" placeholder="0.00">
+                </div>
+                <div class="pt-4 flex gap-3">
+                    <button onclick="executeTrade('buy')" class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded transition shadow-lg">Buy / Long</button>
+                    <button onclick="executeTrade('sell')" class="flex-grow bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition shadow-lg">Sell / Short</button>
+                </div>
+                <button onclick="closeTradeModal()" class="w-full mt-2 py-2 text-gray-500 hover:text-gray-300 text-sm transition">Cancel Order</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="sticky top-0 z-40 glass-panel border-b-0 border-gold-500/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
                     <i class="fa-solid fa-chart-line text-gold-500 text-3xl mr-3"></i>
@@ -157,10 +238,13 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
                         <button onclick="navigateTo('home')" class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="home">Home</button>
-                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Markets</button>
+                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Dashboard</button>
                         <button onclick="navigateTo('community')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="community">Community</button>
                         <button onclick="navigateTo('ai-chat')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="ai-chat">AI Analyst</button>
                         <button onclick="navigateTo('premium')" class="px-4 py-2 rounded-md text-sm font-bold bg-gold-600 text-dark-900 hover:bg-gold-500 transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Premium</button>
+                        <div id="auth-wrapper-desktop" class="inline-block ml-4 border-l border-dark-700 pl-4">
+                            <button onclick="toggleLoginModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i class="fa-solid fa-user mr-2"></i>Login</button>
+                        </div>
                     </div>
                 </div>
                 <!-- Mobile menu button -->
@@ -175,10 +259,13 @@
         <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-gold-500/30 absolute w-full z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
-                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
+                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Dashboard</button>
                 <button onclick="navigateTo('community'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Community</button>
                 <button onclick="navigateTo('ai-chat'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">AI Analyst</button>
                 <button onclick="navigateTo('premium'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-bold text-gold-500">Premium</button>
+                <div id="auth-wrapper-mobile" class="px-3 py-2 mt-2 border-t border-dark-700">
+                    <button onclick="toggleLoginModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -190,15 +277,11 @@
         <section id="page-home" class="page-section">
             <!-- Live Ticker -->
             <div class="bg-dark-900 border-b border-gold-500/20 overflow-hidden whitespace-nowrap py-2 flex items-center">
-                <div class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 absolute left-0">LIVE STATS</div>
-                <div class="inline-block animate-marquee pl-32 text-sm text-gray-300">
-                    <span class="mx-4">BTC/USDT <span class="text-green-500">▲ 2.4%</span></span> •
-                    <span class="mx-4">ETH/USDT <span class="text-green-500">▲ 1.1%</span></span> •
-                    <span class="mx-4">NIFTY 50 <span class="text-red-500">▼ 0.3%</span></span> •
-                    <span class="mx-4">RELIANCE <span class="text-green-500">▲ 1.8%</span></span> •
-                    <span class="mx-4">EUR/USD <span class="text-red-500">▼ 0.1%</span></span> •
-                    <span class="mx-4">USD/JPY <span class="text-green-500">▲ 0.5%</span></span> •
-                    <span class="mx-4">SOL/USDT <span class="text-green-500">▲ 5.2%</span></span>
+                <div class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 absolute left-0 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-gold-500"></i> LIVE
+                </div>
+                <div id="live-ticker-track-home" class="inline-block animate-marquee pl-32 text-sm text-gray-300">
+                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Connecting to Live Markets...</span>
                 </div>
             </div>
 
@@ -208,6 +291,7 @@
                     <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.15)_0,rgba(10,10,10,1)_100%)]"></div>
                 </div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-16 pb-20 text-center lg:pt-28">
+                    <span class="bg-dark-800 border border-gold-500/30 text-gold-500 text-xs font-bold px-3 py-1 rounded-full mb-6 inline-block tracking-widest uppercase">Now with Gemini AI Insights ✨</span>
                     <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
                         The Encyclopedia of <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-gold-600">Modern Trading</span>
@@ -216,7 +300,7 @@
                         Tradeverse is your definitive hub for Cryptocurrencies, the National Stock Exchange of India (NSE), and Global Forex markets. Access live data, chat with peers, and consult our AI.
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_20px_rgba(234,179,8,0.3)]">Explore Markets</button>
+                        <button onclick="navigateTo('markets')" class="px-8 py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-lg shadow-[0_0_20px_rgba(234,179,8,0.3)]">Explore Dashboard</button>
                         <button onclick="navigateTo('ai-chat')" class="px-8 py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-lg">Ask AI Analyst</button>
                     </div>
                 </div>
@@ -288,11 +372,21 @@
             </div>
         </section>
 
-        <!-- MARKETS PAGE -->
+        <!-- MARKETS DASHBOARD PAGE -->
         <section id="page-markets" class="page-section hidden max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
             
+            <!-- Live Ticker (Markets) -->
+            <div class="bg-dark-900 border border-gold-500/20 rounded-lg overflow-hidden whitespace-nowrap py-2 flex items-center mb-6">
+                <div class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 shadow-[5px_0_10px_rgba(10,10,10,1)] flex items-center gap-2">
+                    <i class="fa-solid fa-satellite-dish text-gold-500 animate-pulse"></i> LIVE
+                </div>
+                <div id="live-ticker-track-markets" class="inline-block animate-marquee text-sm text-gray-300 w-full">
+                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Syncing Data Streams...</span>
+                </div>
+            </div>
+
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-gold-500"><i class="fa-solid fa-chart-pie mr-2"></i> Live Markets</h2>
+                <h2 class="text-3xl font-bold text-gold-500"><i class="fa-solid fa-chart-line mr-2"></i> Data Screener & Charts</h2>
                 <!-- Small ad in markets header -->
                 <div class="hidden md:block bg-dark-800 border border-dark-700 text-xs px-4 py-2 rounded text-gray-400">
                     <span class="text-gold-500 font-bold">Ad:</span> Zero-fee crypto trading on <a href="#" class="text-blue-400 hover:underline">PartnerEx</a>
@@ -301,33 +395,60 @@
             
             <!-- Market Forums Toggle -->
             <div class="flex space-x-2 mb-6 border-b border-dark-700 pb-2 overflow-x-auto custom-scrollbar">
-                <button onclick="switchMarket('crypto')" id="tab-crypto" class="market-tab active px-6 py-2 rounded-t-lg font-semibold transition whitespace-nowrap">Crypto Forum</button>
-                <button onclick="switchMarket('nse')" id="tab-nse" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">NSE Forum</button>
-                <button onclick="switchMarket('forex')" id="tab-forex" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap">Forex Forum</button>
+                <button onclick="switchMarket('crypto')" id="tab-crypto" class="market-tab active px-6 py-2 rounded-t-lg font-semibold transition whitespace-nowrap"><i class="fa-brands fa-bitcoin mr-2"></i>Crypto</button>
+                <button onclick="switchMarket('nse')" id="tab-nse" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i class="fa-solid fa-building-columns mr-2"></i>NSE</button>
+                <button onclick="switchMarket('forex')" id="tab-forex" class="market-tab px-6 py-2 rounded-t-lg font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i class="fa-solid fa-money-bill-trend-up mr-2"></i>Forex</button>
             </div>
 
-            <!-- Asset Sub-toggles -->
-            <div id="asset-container" class="flex flex-wrap gap-2 mb-6 max-h-40 overflow-y-auto custom-scrollbar p-1">
-                <!-- Assets populated by JS -->
-            </div>
+            <!-- Messari Style Dashboard Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[75vh] min-h-[600px]">
+                
+                <!-- LEFT: Asset Data Table Screener -->
+                <div class="lg:col-span-1 flex flex-col glass-panel rounded-xl overflow-hidden border border-gold-500/20">
+                    <div class="bg-dark-800 p-3 border-b border-dark-700 flex justify-between items-center">
+                        <span class="font-bold text-sm text-gray-200">Asset Screener</span>
+                        <i class="fa-solid fa-filter text-gray-500 text-xs cursor-pointer hover:text-gold-500"></i>
+                    </div>
+                    <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow bg-dark-900/50">
+                        <table class="w-full text-left text-sm text-gray-300">
+                            <thead class="text-xs text-gray-500 bg-dark-900 sticky top-0 z-10 border-b border-dark-700 shadow-sm">
+                                <tr>
+                                    <th class="px-4 py-3 font-semibold">Asset Name</th>
+                                    <th class="px-3 py-3 font-semibold text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="asset-table-body" class="divide-y divide-dark-800/50">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Chart Container (Takes up 3/4 on large screens) -->
-                <div class="lg:col-span-3">
-                    <div class="glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative w-full h-[500px] sm:h-[600px] lg:h-[700px] shadow-lg" id="tv_chart_container">
+                <!-- CENTER: Chart Container -->
+                <div class="lg:col-span-2 flex flex-col">
+                    <div class="glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative w-full h-full shadow-lg" id="tv_chart_container">
                         <!-- TradingView Widget injects here -->
                     </div>
                 </div>
 
-                <!-- Market Specific News Section -->
+                <!-- RIGHT: Market Specific News Section & Sentiment -->
                 <div class="lg:col-span-1 flex flex-col h-full">
-                    <div class="glass-panel rounded-xl border border-gold-500/20 p-4 h-full max-h-[700px] flex flex-col bg-dark-900/80">
-                        <h3 class="text-xl font-bold text-white border-b border-dark-700 pb-3 mb-4 flex items-center justify-between">
-                            <span><i class="fa-solid fa-newspaper text-gold-500 mr-2"></i> Market News</span>
-                            <span id="news-badge" class="text-xs bg-gold-500 text-dark-900 px-2 py-1 rounded font-bold">CRYPTO</span>
-                        </h3>
+                    <div class="glass-panel rounded-xl border border-gold-500/20 p-4 h-full flex flex-col bg-dark-900/80">
                         
-                        <div id="news-container" class="overflow-y-auto custom-scrollbar pr-2 space-y-4 flex-grow">
+                        <div class="border-b border-dark-700 pb-3 mb-4 flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-white flex items-center">
+                                <i class="fa-solid fa-newspaper text-gold-500 mr-2"></i> Live News
+                            </h3>
+                            <span id="news-badge" class="text-[10px] bg-gold-500 text-dark-900 px-2 py-1 rounded font-bold uppercase tracking-wider">CRYPTO</span>
+                        </div>
+                        
+                        <!-- Gemini LLM Feature Button -->
+                        <button onclick="analyzeNewsSentiment()" id="btn-analyze-sentiment" class="w-full mb-4 py-2 bg-dark-800 hover:bg-dark-700 border border-gold-500/50 text-gold-400 text-sm font-semibold rounded transition flex items-center justify-center gap-2 group shadow-[0_0_10px_rgba(234,179,8,0.1)]">
+                            <i class="fa-solid fa-sparkles text-gold-500 group-hover:animate-pulse"></i>
+                            Analyze Market Sentiment
+                        </button>
+
+                        <div id="news-container" class="overflow-y-auto custom-scrollbar pr-2 space-y-3 flex-grow">
                             <!-- News articles injected by JS -->
                         </div>
                     </div>
@@ -343,7 +464,7 @@
                     <span class="text-xs font-semibold px-2 py-1 bg-green-500/20 text-green-400 rounded-full">● 1,204 Online</span>
                 </div>
                 
-                <div id="community-messages" class="flex-grow p-6 overflow-y-auto space-y-4">
+                <div id="community-messages" class="flex-grow p-6 overflow-y-auto custom-scrollbar space-y-4">
                     <!-- Chat messages -->
                     <div class="flex items-start mb-4">
                         <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold mr-3 border border-gray-600">JD</div>
@@ -390,7 +511,7 @@
                     </div>
                 </div>
                 
-                <div id="ai-messages" class="flex-grow p-6 overflow-y-auto space-y-6">
+                <div id="ai-messages" class="flex-grow p-6 overflow-y-auto custom-scrollbar space-y-6">
                     <!-- AI Welcome Message -->
                     <div class="flex items-start">
                         <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-3 mt-1">
@@ -483,10 +604,25 @@
         /* --- GLOBAL & UTILS --- */
         const apiKey = ""; // API key injected by environment
         let tvWidget = null;
+        let activeMarket = 'crypto';
+
+        // Initialize Cookies on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('cookieConsent')) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.remove('translate-y-full');
+                }, 1000);
+            }
+        });
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'true');
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        }
 
         function showModal(message, title = "Notice") {
             document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-message').innerHTML = message;
             document.getElementById('custom-modal').classList.remove('hidden');
         }
 
@@ -525,80 +661,74 @@
         /* --- MARKETS, CHARTS & NEWS --- */
         const marketData = {
             crypto: [
-                { name: 'Bitcoin', symbol: 'BINANCE:BTCUSDT' },
-                { name: 'Ethereum', symbol: 'BINANCE:ETHUSDT' },
-                { name: 'Solana', symbol: 'BINANCE:SOLUSDT' },
-                { name: 'Cardano', symbol: 'BINANCE:ADAUSDT' },
-                { name: 'Dogecoin', symbol: 'BINANCE:DOGEUSDT' },
-                { name: 'XRP', symbol: 'BINANCE:XRPUSDT' },
-                { name: 'Polkadot', symbol: 'BINANCE:DOTUSDT' },
-                { name: 'Polygon', symbol: 'BINANCE:MATICUSDT' },
-                { name: 'Chainlink', symbol: 'BINANCE:LINKUSDT' },
-                { name: 'BNB', symbol: 'BINANCE:BNBUSDT' },
-                { name: 'Avalanche', symbol: 'BINANCE:AVAXUSDT' },
-                { name: 'Uniswap', symbol: 'BINANCE:UNIUSDT' },
-                { name: 'Cosmos', symbol: 'BINANCE:ATOMUSDT' },
-                { name: 'Litecoin', symbol: 'BINANCE:LTCUSDT' },
-                { name: 'Shiba Inu', symbol: 'BINANCE:SHIBUSDT' }
+                { name: 'Bitcoin', symbol: 'BINANCE:BTCUSDT', ticker: 'BTC' },
+                { name: 'Ethereum', symbol: 'BINANCE:ETHUSDT', ticker: 'ETH' },
+                { name: 'Solana', symbol: 'BINANCE:SOLUSDT', ticker: 'SOL' },
+                { name: 'Cardano', symbol: 'BINANCE:ADAUSDT', ticker: 'ADA' },
+                { name: 'Dogecoin', symbol: 'BINANCE:DOGEUSDT', ticker: 'DOGE' },
+                { name: 'XRP', symbol: 'BINANCE:XRPUSDT', ticker: 'XRP' },
+                { name: 'Polkadot', symbol: 'BINANCE:DOTUSDT', ticker: 'DOT' },
+                { name: 'Polygon', symbol: 'BINANCE:MATICUSDT', ticker: 'MATIC' },
+                { name: 'Chainlink', symbol: 'BINANCE:LINKUSDT', ticker: 'LINK' },
+                { name: 'BNB', symbol: 'BINANCE:BNBUSDT', ticker: 'BNB' },
+                { name: 'Avalanche', symbol: 'BINANCE:AVAXUSDT', ticker: 'AVAX' },
+                { name: 'Uniswap', symbol: 'BINANCE:UNIUSDT', ticker: 'UNI' }
             ],
             nse: [
-                { name: 'Reliance', symbol: 'BSE:RELIANCE' },
-                { name: 'TCS', symbol: 'BSE:TCS' },
-                { name: 'HDFC Bank', symbol: 'BSE:HDFCBANK' },
-                { name: 'Infosys', symbol: 'BSE:INFY' },
-                { name: 'Tata Motors', symbol: 'BSE:TATAMOTORS' },
-                { name: 'ICICI Bank', symbol: 'BSE:ICICIBANK' },
-                { name: 'SBI', symbol: 'BSE:SBIN' },
-                { name: 'Bharti Airtel', symbol: 'BSE:BHARTIARTL' },
-                { name: 'ITC', symbol: 'BSE:ITC' },
-                { name: 'Kotak Bank', symbol: 'BSE:KOTAKBANK' },
-                { name: 'Larsen & Toubro', symbol: 'BSE:LT' },
-                { name: 'HUL', symbol: 'BSE:HINDUNILVR' },
-                { name: 'Axis Bank', symbol: 'BSE:AXISBANK' },
-                { name: 'Bajaj Finance', symbol: 'BSE:BAJFINANCE' },
-                { name: 'Asian Paints', symbol: 'BSE:ASIANPAINT' }
+                { name: 'Reliance Ind.', symbol: 'BSE:RELIANCE', ticker: 'RELIANCE' },
+                { name: 'TCS', symbol: 'BSE:TCS', ticker: 'TCS' },
+                { name: 'HDFC Bank', symbol: 'BSE:HDFCBANK', ticker: 'HDFCBANK' },
+                { name: 'Infosys', symbol: 'BSE:INFY', ticker: 'INFY' },
+                { name: 'Tata Motors', symbol: 'BSE:TATAMOTORS', ticker: 'TATAMOTORS' },
+                { name: 'ICICI Bank', symbol: 'BSE:ICICIBANK', ticker: 'ICICIBANK' },
+                { name: 'SBI', symbol: 'BSE:SBIN', ticker: 'SBIN' },
+                { name: 'Bharti Airtel', symbol: 'BSE:BHARTIARTL', ticker: 'BHARTI' },
+                { name: 'ITC', symbol: 'BSE:ITC', ticker: 'ITC' },
+                { name: 'Kotak Bank', symbol: 'BSE:KOTAKBANK', ticker: 'KOTAK' },
+                { name: 'Larsen & Toubro', symbol: 'BSE:LT', ticker: 'LT' },
+                { name: 'HUL', symbol: 'BSE:HINDUNILVR', ticker: 'HUL' }
             ],
             forex: [
-                { name: 'EUR/USD', symbol: 'FX:EURUSD' },
-                { name: 'GBP/USD', symbol: 'FX:GBPUSD' },
-                { name: 'USD/JPY', symbol: 'FX:USDJPY' },
-                { name: 'AUD/USD', symbol: 'FX:AUDUSD' },
-                { name: 'USD/CAD', symbol: 'FX:USDCAD' },
-                { name: 'USD/CHF', symbol: 'FX:USDCHF' },
-                { name: 'NZD/USD', symbol: 'FX:NZDUSD' },
-                { name: 'EUR/GBP', symbol: 'FX:EURGBP' },
-                { name: 'EUR/JPY', symbol: 'FX:EURJPY' },
-                { name: 'GBP/JPY', symbol: 'FX:GBPJPY' },
-                { name: 'AUD/JPY', symbol: 'FX:AUDJPY' },
-                { name: 'EUR/CHF', symbol: 'FX:EURCHF' }
+                { name: 'Euro / US Dollar', symbol: 'FX:EURUSD', ticker: 'EUR/USD' },
+                { name: 'British Pound / USD', symbol: 'FX:GBPUSD', ticker: 'GBP/USD' },
+                { name: 'US Dollar / Yen', symbol: 'FX:USDJPY', ticker: 'USD/JPY' },
+                { name: 'Aussie Dollar / USD', symbol: 'FX:AUDUSD', ticker: 'AUD/USD' },
+                { name: 'US Dollar / CAD', symbol: 'FX:USDCAD', ticker: 'USD/CAD' },
+                { name: 'US Dollar / Swiss', symbol: 'FX:USDCHF', ticker: 'USD/CHF' },
+                { name: 'Kiwi Dollar / USD', symbol: 'FX:NZDUSD', ticker: 'NZD/USD' },
+                { name: 'Euro / British Pound', symbol: 'FX:EURGBP', ticker: 'EUR/GBP' },
+                { name: 'Euro / Yen', symbol: 'FX:EURJPY', ticker: 'EUR/JPY' },
+                { name: 'British Pound / Yen', symbol: 'FX:GBPJPY', ticker: 'GBP/JPY' }
             ]
         };
 
         const newsData = {
             crypto: [
-                { title: "Bitcoin Surges Past Key Resistance Level on Institutional Buying", time: "2 hours ago", source: "CoinTelegraph" },
-                { title: "Ethereum Gas Fees Hit Yearly Low Following Dencun Upgrade", time: "4 hours ago", source: "Decrypt" },
-                { title: "Solana DeFi TVL Crosses $5 Billion Mark Amid Airdrop Season", time: "5 hours ago", source: "Blockworks" },
-                { title: "SEC Delays Decision on Spot Altcoin ETF Applications", time: "8 hours ago", source: "CryptoSlate" },
-                { title: "Major Crypto Exchange Announces Expansion into European Markets", time: "12 hours ago", source: "CoinDesk" }
+                { title: "Bitcoin Surges Past Key Resistance Level on Institutional Buying", time: "2 hours ago", source: "CoinTelegraph", url: "https://cointelegraph.com" },
+                { title: "Ethereum Gas Fees Hit Yearly Low Following Dencun Upgrade", time: "4 hours ago", source: "Decrypt", url: "https://decrypt.co" },
+                { title: "Solana DeFi TVL Crosses $5 Billion Mark Amid Airdrop Season", time: "5 hours ago", source: "Blockworks", url: "https://blockworks.co" },
+                { title: "SEC Delays Decision on Spot Altcoin ETF Applications", time: "8 hours ago", source: "CryptoSlate", url: "https://cryptoslate.com" },
+                { title: "Major Crypto Exchange Announces Expansion into European Markets", time: "12 hours ago", source: "CoinDesk", url: "https://coindesk.com" }
             ],
             nse: [
-                { title: "RBI Holds Repo Rate Steady at 6.5%, Focuses on Inflation", time: "1 hour ago", source: "Economic Times" },
-                { title: "Reliance Industries Unveils Ambitious Green Energy Gigafactory Plan", time: "3 hours ago", source: "Moneycontrol" },
-                { title: "TCS Bags Multi-Million Dollar Deal from European Retail Giant", time: "5 hours ago", source: "Mint" },
-                { title: "Nifty 50 Hits Fresh All-Time High Led by Banking and Auto Stocks", time: "7 hours ago", source: "CNBC TV18" },
-                { title: "Tata Motors EV Sales Surge 40% Year-on-Year in Latest Quarter", time: "10 hours ago", source: "Business Standard" }
+                { title: "RBI Holds Repo Rate Steady at 6.5%, Focuses on Inflation", time: "1 hour ago", source: "Economic Times", url: "https://economictimes.indiatimes.com" },
+                { title: "Reliance Industries Unveils Ambitious Green Energy Gigafactory Plan", time: "3 hours ago", source: "Moneycontrol", url: "https://www.moneycontrol.com" },
+                { title: "TCS Bags Multi-Million Dollar Deal from European Retail Giant", time: "5 hours ago", source: "Mint", url: "https://www.livemint.com" },
+                { title: "Nifty 50 Hits Fresh All-Time High Led by Banking and Auto Stocks", time: "7 hours ago", source: "CNBC TV18", url: "https://www.cnbctv18.com" },
+                { title: "Tata Motors EV Sales Surge 40% Year-on-Year in Latest Quarter", time: "10 hours ago", source: "Business Standard", url: "https://www.business-standard.com" }
             ],
             forex: [
-                { title: "Fed Chair Jerome Powell Signals Potential Rate Cuts by Q3", time: "1 hour ago", source: "Reuters" },
-                { title: "ECB Maintains Hawkish Stance Despite Slight Drop in Eurozone Inflation", time: "3 hours ago", source: "Bloomberg" },
-                { title: "Bank of Japan Considers Ending Negative Interest Rate Policy", time: "6 hours ago", source: "Financial Times" },
-                { title: "US Dollar Index (DXY) Weakens Amid Dovish Federal Reserve Commentary", time: "9 hours ago", source: "FXStreet" },
-                { title: "GBP/USD Volatile as UK Jobs Report Shows Unexpected Wage Growth", time: "11 hours ago", source: "DailyFX" }
+                { title: "Fed Chair Jerome Powell Signals Potential Rate Cuts by Q3", time: "1 hour ago", source: "Reuters", url: "https://www.reuters.com/markets/currencies/" },
+                { title: "ECB Maintains Hawkish Stance Despite Slight Drop in Eurozone Inflation", time: "3 hours ago", source: "Bloomberg", url: "https://www.bloomberg.com/markets/currencies" },
+                { title: "Bank of Japan Considers Ending Negative Interest Rate Policy", time: "6 hours ago", source: "Financial Times", url: "https://www.ft.com/markets" },
+                { title: "US Dollar Index (DXY) Weakens Amid Dovish Federal Reserve Commentary", time: "9 hours ago", source: "FXStreet", url: "https://www.fxstreet.com" },
+                { title: "GBP/USD Volatile as UK Jobs Report Shows Unexpected Wage Growth", time: "11 hours ago", source: "DailyFX", url: "https://www.dailyfx.com" }
             ]
         };
 
         function switchMarket(marketType) {
+            activeMarket = marketType;
+            
             // Update Tabs UI
             document.querySelectorAll('.market-tab').forEach(tab => {
                 tab.classList.remove('active', 'text-dark-900', 'bg-gold-500');
@@ -611,20 +741,26 @@
             // Update News Badge
             document.getElementById('news-badge').innerText = marketType.toUpperCase();
 
-            // Populate Assets
-            const container = document.getElementById('asset-container');
-            container.innerHTML = '';
+            // Populate Assets (Messari Table Style)
+            const tableBody = document.getElementById('asset-table-body');
+            tableBody.innerHTML = '';
             
             marketData[marketType].forEach((asset, index) => {
-                const btn = document.createElement('button');
-                btn.className = `asset-btn px-4 py-2 mb-2 mr-2 rounded text-sm font-medium border border-dark-700 bg-dark-800 text-gray-300 hover:border-gold-500 hover:text-gold-400 transition whitespace-nowrap ${index === 0 ? 'active' : ''}`;
-                btn.innerText = asset.name;
-                btn.onclick = () => {
-                    document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    initTradingView(asset.symbol);
-                };
-                container.appendChild(btn);
+                const tr = document.createElement('tr');
+                tr.className = `asset-row border-b border-dark-800/50 ${index === 0 ? 'active' : ''}`;
+                tr.innerHTML = `
+                    <td class="px-4 py-3" onclick="selectAsset(this, '${asset.symbol}')">
+                        <div class="font-bold text-gray-200">${asset.name}</div>
+                        <div class="text-xs text-gray-500">${asset.ticker}</div>
+                    </td>
+                    <td class="px-3 py-3 text-right flex justify-end gap-2">
+                        <button onclick="openTradeModal('${asset.name}', '${asset.ticker}')" class="text-xs bg-green-600/10 hover:bg-green-600 text-green-500 hover:text-white border border-green-600/30 px-3 py-1 rounded transition">Trade</button>
+                        <button onclick="analyzeAsset('${asset.name}')" class="text-xs bg-dark-700 hover:bg-gold-500 hover:text-dark-900 text-gold-500 border border-gold-500/30 px-2 py-1 rounded transition group" title="Get AI Analysis">
+                            <i class="fa-solid fa-sparkles"></i> <span class="hidden xl:inline">AI</span>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
             });
 
             // Populate News
@@ -633,13 +769,13 @@
             
             newsData[marketType].forEach(news => {
                 const newsHTML = `
-                    <div class="news-card bg-dark-800 border border-dark-700 p-4 rounded-lg cursor-pointer transition-all duration-300">
-                        <h4 class="text-sm font-bold text-gray-200 mb-2 leading-tight">${news.title}</h4>
+                    <a href="${news.url}" target="_blank" class="block news-card bg-dark-800/80 border border-dark-700 p-3 rounded-lg cursor-pointer transition-all duration-300">
+                        <h4 class="text-sm font-bold text-gray-200 mb-2 leading-tight hover:text-gold-400 transition">${news.title}</h4>
                         <div class="flex justify-between items-center text-xs text-gray-500">
                             <span><i class="fa-regular fa-clock mr-1"></i> ${news.time}</span>
                             <span class="font-semibold text-gold-600">${news.source}</span>
                         </div>
-                    </div>
+                    </a>
                 `;
                 newsContainer.insertAdjacentHTML('beforeend', newsHTML);
             });
@@ -648,6 +784,14 @@
             if(marketData[marketType].length > 0) {
                 initTradingView(marketData[marketType][0].symbol);
             }
+        }
+
+        function selectAsset(cellElement, symbol) {
+            // Update active styling
+            document.querySelectorAll('.asset-row').forEach(row => row.classList.remove('active'));
+            cellElement.parentElement.classList.add('active');
+            
+            initTradingView(symbol);
         }
 
         function initTradingView(symbolStr) {
@@ -672,55 +816,70 @@
         }
 
 
-        /* --- COMMUNITY CHAT --- */
-        function sendCommunityMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('community-input');
-            const msg = input.value.trim();
-            if(!msg) return;
+        /* --- NEW GEMINI API FEATURES --- */
 
-            const chatContainer = document.getElementById('community-messages');
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        // Feature 1: Analyze specific asset fundamentally
+        async function analyzeAsset(assetName) {
+            const prompt = `Act as an expert financial analyst. Provide a brief, 2-sentence fundamental analysis of the financial asset "${assetName}". What is its current overarching market narrative?`;
             
-            const msgHTML = `
-                <div class="flex items-start mb-4 justify-end">
-                    <div class="text-right">
-                        <div class="bg-gold-600 text-dark-900 px-4 py-2 rounded-2xl rounded-tr-none inline-block max-w-xs text-left">
-                            <p class="text-sm font-medium">${msg}</p>
-                        </div>
-                        <span class="text-xs text-gray-500 mt-1 mr-1 block">${time}</span>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-dark-700 flex items-center justify-center font-bold ml-3 border border-gold-500 text-gold-500">YOU</div>
-                </div>
-            `;
+            showModal(`<div class="flex flex-col items-center py-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 text-4xl mb-4"></i><p>Consulting Gemini AI regarding <strong>${assetName}</strong>...</p></div>`, `✨ AI Insight: ${assetName}`);
             
-            chatContainer.insertAdjacentHTML('beforeend', msgHTML);
-            input.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            try {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const response = await fetchWithRetry(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
 
-            // Simulate random response
-            setTimeout(() => {
-                const replies = ["Agreed.", "Let's watch the volume.", "Bullish patterns forming.", "Careful with the resistance level here."];
-                const reply = replies[Math.floor(Math.random() * replies.length)];
-                
-                const replyHTML = `
-                <div class="flex items-start mb-4">
-                    <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center font-bold mr-3 border border-gray-600 text-white">TR</div>
-                    <div>
-                        <div class="bg-dark-700 px-4 py-2 rounded-2xl rounded-tl-none">
-                            <span class="text-xs text-gold-400 font-bold block mb-1">Trader_X</span>
-                            <p class="text-sm">${reply}</p>
-                        </div>
-                        <span class="text-xs text-gray-500 mt-1 ml-1">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                    </div>
-                </div>
-                `;
-                chatContainer.insertAdjacentHTML('beforeend', replyHTML);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 1500);
+                const data = await response.json();
+                let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if(!text) throw new Error("Empty response");
+
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400">$1</strong>').replace(/\n/g, '<br/>');
+                showModal(`<div class="text-sm border-l-4 border-gold-500 pl-4 py-2">${text}</div>`, `✨ AI Insight: ${assetName}`);
+            } catch (error) {
+                console.error("Gemini Error:", error);
+                showModal(`<div class="text-red-400 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Failed to fetch AI insights. Ensure API key is configured.</div>`, "Error");
+            }
         }
 
-        /* --- AI CHATBOT --- */
+        // Feature 2: Analyze general news sentiment
+        async function analyzeNewsSentiment() {
+            const btn = document.getElementById('btn-analyze-sentiment');
+            const originalHTML = btn.innerHTML;
+            
+            // Gather current headlines
+            const currentHeadlines = newsData[activeMarket].map(n => n.title).join(" | ");
+            const prompt = `Act as an expert financial analyst. Analyze these current news headlines for the ${activeMarket.toUpperCase()} market: "${currentHeadlines}". Provide a 2-3 sentence summary of the overall market sentiment (Is it strongly bullish, slightly bullish, neutral, slightly bearish, or strongly bearish, and why?). Format your response starting with the bolded sentiment state.`;
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-gold-500"></i> Processing...`;
+
+            try {
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const response = await fetchWithRetry(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const data = await response.json();
+                let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if(!text) throw new Error("Empty response");
+
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400 text-lg">$1</strong>').replace(/\n/g, '<br/>');
+                showModal(`<div class="text-sm bg-dark-800 p-4 rounded-lg border border-gold-500/30">${text}</div>`, `✨ ${activeMarket.toUpperCase()} Sentiment`);
+            } catch (error) {
+                console.error("Gemini Error:", error);
+                showModal(`<div class="text-red-400 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Failed to analyze sentiment. Ensure API key is configured.</div>`, "Error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // Generic API Fetcher
         async function fetchWithRetry(url, options, retries = 5) {
             const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < retries; i++) {
@@ -738,6 +897,8 @@
             }
         }
 
+
+        /* --- ORIGINAL AI CHATBOT (AI ANALYST PAGE) --- */
         async function sendAiMessage(e) {
             e.preventDefault();
             const input = document.getElementById('ai-input');
@@ -848,9 +1009,56 @@
             }
         }
 
+
+        /* --- COMMUNITY CHAT --- */
+        function sendCommunityMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('community-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+
+            const chatContainer = document.getElementById('community-messages');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const msgHTML = `
+                <div class="flex items-start mb-4 justify-end">
+                    <div class="text-right">
+                        <div class="bg-gold-600 text-dark-900 px-4 py-2 rounded-2xl rounded-tr-none inline-block max-w-xs text-left">
+                            <p class="text-sm font-medium">${msg}</p>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 mr-1 block">${time}</span>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-dark-700 flex items-center justify-center font-bold ml-3 border border-gold-500 text-gold-500">YOU</div>
+                </div>
+            `;
+            
+            chatContainer.insertAdjacentHTML('beforeend', msgHTML);
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Simulate random response
+            setTimeout(() => {
+                const replies = ["Agreed.", "Let's watch the volume.", "Bullish patterns forming.", "Careful with the resistance level here."];
+                const reply = replies[Math.floor(Math.random() * replies.length)];
+                
+                const replyHTML = `
+                <div class="flex items-start mb-4">
+                    <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center font-bold mr-3 border border-gray-600 text-white">TR</div>
+                    <div>
+                        <div class="bg-dark-700 px-4 py-2 rounded-2xl rounded-tl-none">
+                            <span class="text-xs text-gold-400 font-bold block mb-1">Trader_X</span>
+                            <p class="text-sm">${reply}</p>
+                        </div>
+                        <span class="text-xs text-gray-500 mt-1 ml-1">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', replyHTML);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1500);
+        }
+
         /* --- RAZORPAY MOCK SIMULATION --- */
-        // Since Razorpay JS strict requires a valid backend `order_id` to open, 
-        // we use a fully simulated frontend UI to demonstrate the flow.
         function openPaymentModal(planName, amount) {
             document.getElementById('pay-plan-name').innerText = planName;
             document.getElementById('pay-plan-amount').innerText = "₹" + amount.toLocaleString();
@@ -867,12 +1075,182 @@
             document.getElementById('payment-actions').classList.add('hidden');
             document.getElementById('payment-processing').classList.remove('hidden');
             
-            // Simulate network delay for payment gateway
             setTimeout(() => {
                 closePaymentModal();
                 const fakePaymentId = "pay_" + Math.random().toString(36).substr(2, 14);
                 showModal(`Payment Successful!\nTransaction ID: ${fakePaymentId}\n\nWelcome to Tradeverse Premium.`, "Subscription Activated");
             }, 2500);
+        }
+
+        /* --- NEW: LIVE TICKER LOGIC --- */
+        let tickerData = [
+            { symbol: "BTCUSDT", display: "BTC/USDT", price: 65000.00, change: 2.4, isCrypto: true },
+            { symbol: "ETHUSDT", display: "ETH/USDT", price: 3500.00, change: 1.1, isCrypto: true },
+            { symbol: "SOLUSDT", display: "SOL/USDT", price: 150.00, change: 5.2, isCrypto: true },
+            { symbol: "NIFTY", display: "NIFTY 50", price: 22543.20, change: -0.3, isCrypto: false },
+            { symbol: "RELIANCE", display: "RELIANCE", price: 2950.45, change: 1.8, isCrypto: false },
+            { symbol: "EURUSD", display: "EUR/USD", price: 1.0845, change: -0.1, isCrypto: false }
+        ];
+
+        async function fetchLiveTickerData() {
+            try {
+                // Real Binance API for Crypto Quotes (Public, no key required)
+                const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
+                const data = await res.json();
+                
+                if(Array.isArray(data)) {
+                    data.forEach(item => {
+                        const target = tickerData.find(t => t.symbol === item.symbol);
+                        if(target) {
+                            target.price = parseFloat(item.lastPrice);
+                            target.change = parseFloat(item.priceChangePercent);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.warn("Binance API fetch blocked or limited, using simulated micro-fluctuations.");
+            }
+
+            // Simulate real-time micro-fluctuations for Stocks/Forex 
+            // (Since free live APIs for Indian markets block CORS strictly)
+            tickerData.forEach(item => {
+                if(!item.isCrypto) {
+                    const fluctuation = (Math.random() - 0.5) * 0.005; // +/- 0.25% swing
+                    item.price = item.price * (1 + fluctuation);
+                    item.change = item.change + (fluctuation * 10); // arbitrary visual delta
+                }
+            });
+
+            updateTickerUI();
+        }
+
+        function updateTickerUI() {
+            const createHTML = () => tickerData.map(t => {
+                const colorClass = t.change >= 0 ? "text-green-500" : "text-red-500";
+                const icon = t.change >= 0 ? "▲" : "▼";
+                const formattedPrice = t.price < 10 ? t.price.toFixed(4) : t.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                return `<span class="mx-4 font-semibold">${t.display} <span class="text-gray-400 text-xs ml-1">${formattedPrice}</span> <span class="${colorClass} ml-1">${icon} ${Math.abs(t.change).toFixed(2)}%</span></span> •`;
+            }).join(" ");
+
+            const htmlString = createHTML();
+            
+            const homeTicker = document.getElementById('live-ticker-track-home');
+            if(homeTicker) homeTicker.innerHTML = htmlString + htmlString; // Doubled to loop seamlessly
+
+            const marketsTicker = document.getElementById('live-ticker-track-markets');
+            if(marketsTicker) marketsTicker.innerHTML = htmlString + htmlString;
+        }
+
+        // Initialize Ticker and refresh every 30 seconds
+        fetchLiveTickerData();
+        setInterval(fetchLiveTickerData, 30000);
+
+
+        /* --- AUTHENTICATION & PAPER TRADING LOGIC --- */
+        let userAccount = null; 
+        let selectedTradeAsset = null;
+
+        function toggleLoginModal() {
+            document.getElementById('login-modal').classList.toggle('hidden');
+        }
+
+        function processLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            userAccount = { username: username, balance: 0, portfolio: {} };
+            toggleLoginModal();
+            updateAuthUI();
+            showModal(`Welcome to the trading floor, ${username}!<br><br>Click your wallet balance in the navigation bar to deposit funds and start executing live orders.`, "Authentication Successful");
+        }
+
+        function updateAuthUI() {
+            const desktopWrapper = document.getElementById('auth-wrapper-desktop');
+            const mobileWrapper = document.getElementById('auth-wrapper-mobile');
+            
+            if(userAccount) {
+                const html = `
+                    <button onclick="toggleDepositModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(34,197,94,0.2)] w-full md:w-auto">
+                        <i class="fa-solid fa-wallet"></i> ₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </button>
+                `;
+                if(desktopWrapper) desktopWrapper.innerHTML = html;
+                if(mobileWrapper) mobileWrapper.innerHTML = html;
+            }
+        }
+
+        function toggleDepositModal() {
+            document.getElementById('deposit-modal').classList.toggle('hidden');
+        }
+
+        function processDeposit(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('deposit-amount').value);
+            if(amount > 0) {
+                userAccount.balance += amount;
+                updateAuthUI();
+                toggleDepositModal();
+                showModal(`₹${amount.toLocaleString('en-IN')} has been securely added to your trading account.`, "Deposit Complete");
+            }
+        }
+
+        function openTradeModal(assetName, assetTicker) {
+            if(!userAccount) {
+                showModal("You must be logged in to access the order book and execute trades.", "Authentication Required");
+                toggleLoginModal();
+                return;
+            }
+            
+            selectedTradeAsset = { name: assetName, ticker: assetTicker };
+            
+            // Look for live price in the ticker buffer
+            const tData = tickerData.find(t => t.display.includes(assetTicker) || t.symbol.includes(assetTicker));
+            let priceStr = "Market Execution";
+            if (tData) {
+                // Convert Crypto USD to roughly INR equivalent for universal balance
+                const estimatedInrPrice = tData.price * (tData.isCrypto ? 83 : 1);
+                priceStr = `Live Ask: ₹${estimatedInrPrice.toLocaleString('en-IN', {maximumFractionDigits:2})}`;
+            }
+            
+            document.getElementById('trade-asset-title').innerText = `Trade ${assetTicker}`;
+            document.getElementById('trade-asset-price').innerText = priceStr;
+            document.getElementById('trade-modal').classList.remove('hidden');
+            document.getElementById('trade-amount').value = '';
+        }
+
+        function closeTradeModal() {
+            document.getElementById('trade-modal').classList.add('hidden');
+        }
+
+        function executeTrade(type) {
+            const amount = parseFloat(document.getElementById('trade-amount').value);
+            if(!amount || amount <= 0) return;
+
+            if(type === 'buy') {
+                if(userAccount.balance >= amount) {
+                    userAccount.balance -= amount;
+                    
+                    if(!userAccount.portfolio[selectedTradeAsset.ticker]) userAccount.portfolio[selectedTradeAsset.ticker] = 0;
+                    userAccount.portfolio[selectedTradeAsset.ticker] += amount;
+
+                    updateAuthUI();
+                    closeTradeModal();
+                    showModal(`Order filled successfully. Purchased ₹${amount.toLocaleString('en-IN')} worth of ${selectedTradeAsset.ticker}.`, "Buy Order Executed");
+                } else {
+                    showModal("Insufficient buying power. Please deposit more funds into your wallet to execute this trade.", "Trade Failed");
+                }
+            } else if (type === 'sell') {
+                const holding = userAccount.portfolio[selectedTradeAsset.ticker] || 0;
+                if(holding >= amount) {
+                    userAccount.portfolio[selectedTradeAsset.ticker] -= amount;
+                    userAccount.balance += amount; 
+                    
+                    updateAuthUI();
+                    closeTradeModal();
+                    showModal(`Order filled successfully. Sold ₹${amount.toLocaleString('en-IN')} worth of ${selectedTradeAsset.ticker}.`, "Sell Order Executed");
+                } else {
+                    showModal(`Insufficient holdings. You only own ₹${holding.toLocaleString('en-IN')} of ${selectedTradeAsset.ticker} in your portfolio.`, "Trade Failed");
+                }
+            }
         }
 
     </script>
