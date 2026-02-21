@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📈 Tradeverse | The Ultimate Trading Hub</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -49,7 +51,7 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
+
         body {
             background-color: #0a0a0a;
             color: #f3f4f6;
@@ -62,13 +64,16 @@
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: #0a0a0a;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #ca8a04;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #eab308;
         }
@@ -82,15 +87,17 @@
             background-color: #eab308;
             color: #0a0a0a;
         }
-        
+
         /* Messari Table Row Hover */
         .asset-row {
             cursor: pointer;
             transition: all 0.2s;
         }
+
         .asset-row:hover {
             background-color: rgba(234, 179, 8, 0.05);
         }
+
         .asset-row.active {
             background-color: rgba(234, 179, 8, 0.15);
             border-left: 3px solid #facc15;
@@ -106,11 +113,26 @@
         .typing-dot {
             animation: typing 1.4s infinite ease-in-out both;
         }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
         @keyframes typing {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
         }
 
         /* News Card Hover */
@@ -136,6 +158,7 @@
             font-size: 0.875rem;
             color: #9ca3af;
         }
+
         .creator-name {
             color: #eab308;
             font-weight: 700;
@@ -143,38 +166,51 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
+
         .creator-name:hover {
             color: #facc15;
             text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
         }
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen">
 
     <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" class="fixed bottom-0 w-full glass-panel border-t border-gold-500/50 p-4 z-50 transform translate-y-full transition-transform duration-500">
+    <div id="cookie-banner"
+        class="fixed bottom-0 w-full glass-panel border-t border-gold-500/50 p-4 z-50 transform translate-y-full transition-transform duration-500">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="text-sm text-gray-300">
-                <strong class="text-gold-400"><i class="fa-solid fa-cookie-bite mr-2"></i>Privacy & Cookies:</strong> We use cookies and AI diagnostics to analyze site traffic and improve your trading experience. By continuing, you consent to our privacy policy.
+                <strong class="text-gold-400"><i class="fa-solid fa-cookie-bite mr-2"></i>Privacy & Cookies:</strong> We
+                use cookies and AI diagnostics to analyze site traffic and improve your trading experience. By
+                continuing, you consent to our privacy policy.
             </div>
             <div class="flex gap-3 whitespace-nowrap">
-                <button onclick="acceptCookies()" class="bg-gold-500 hover:bg-gold-400 text-dark-900 px-5 py-2 rounded font-bold transition">Accept All</button>
-                <button onclick="acceptCookies()" class="bg-dark-700 hover:bg-dark-600 text-gray-300 border border-dark-600 px-5 py-2 rounded transition">Decline</button>
+                <button onclick="acceptCookies()"
+                    class="bg-gold-500 hover:bg-gold-400 text-dark-900 px-5 py-2 rounded font-bold transition">Accept
+                    All</button>
+                <button onclick="acceptCookies()"
+                    class="bg-dark-700 hover:bg-dark-600 text-gray-300 border border-dark-600 px-5 py-2 rounded transition">Decline</button>
             </div>
         </div>
     </div>
 
     <!-- Global Message Modal -->
-    <div id="custom-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
-        <div class="glass-panel p-6 sm:p-8 rounded-xl max-w-md w-full text-center border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+    <div id="custom-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
+        <div
+            class="glass-panel p-6 sm:p-8 rounded-xl max-w-md w-full text-center border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
             <h3 id="modal-title" class="text-2xl font-bold text-gold-400 mb-4">Notice</h3>
-            <div id="modal-message" class="text-gray-300 mb-6 text-left leading-relaxed max-h-[60vh] overflow-y-auto pr-2"></div>
-            <button onclick="closeModal()" class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition w-full">OK</button>
+            <div id="modal-message"
+                class="text-gray-300 mb-6 text-left leading-relaxed max-h-[60vh] overflow-y-auto pr-2"></div>
+            <button onclick="closeModal()"
+                class="px-6 py-2 bg-gold-500 text-dark-900 font-bold rounded hover:bg-gold-400 transition w-full">OK</button>
         </div>
     </div>
 
     <!-- Mock Razorpay Payment Modal -->
-    <div id="payment-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-md p-4">
+    <div id="payment-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90 backdrop-blur-md p-4">
         <div class="bg-white rounded-lg max-w-md w-full overflow-hidden shadow-2xl">
             <div class="bg-blue-600 p-6 text-center">
                 <h3 class="text-2xl font-bold text-white mb-1">Tradeverse Checkout</h3>
@@ -189,75 +225,103 @@
                     <span class="font-semibold text-gray-600">Amount:</span>
                     <span id="pay-plan-amount" class="font-bold text-xl text-green-600">₹1,499</span>
                 </div>
-                
+
                 <div id="payment-processing" class="hidden text-center py-4">
                     <i class="fa-solid fa-circle-notch fa-spin text-3xl text-blue-600 mb-3"></i>
                     <p class="font-medium text-gray-600">Processing Payment...</p>
                 </div>
 
                 <div id="payment-actions">
-                    <button onclick="processMockPayment()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition mb-3 shadow-md">Pay Now</button>
-                    <button onclick="closePaymentModal()" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded hover:bg-gray-300 transition">Cancel</button>
+                    <button onclick="processMockPayment()"
+                        class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition mb-3 shadow-md">Pay
+                        Now</button>
+                    <button onclick="closePaymentModal()"
+                        class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded hover:bg-gray-300 transition">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
-        <div class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+    <div id="login-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
+        <div
+            class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-gold-500 border shadow-[0_0_30px_rgba(234,179,8,0.2)]">
             <h3 class="text-2xl font-bold text-white mb-2">Trader Login</h3>
             <p class="text-sm text-gray-400 mb-6">Access your live portfolio.</p>
             <form onsubmit="processLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Username</label>
-                    <input type="text" id="login-username" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500" required placeholder="e.g. Satoshi123">
+                    <input type="text" id="login-username"
+                        class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500"
+                        required placeholder="e.g. Satoshi123">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Password</label>
-                    <input type="password" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500" required placeholder="••••••••">
+                    <input type="password"
+                        class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-gold-500"
+                        required placeholder="••••••••">
                 </div>
                 <div class="pt-2 flex gap-2">
-                    <button type="submit" class="flex-grow bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold py-2 rounded transition">Login</button>
-                    <button type="button" onclick="toggleLoginModal()" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
+                    <button type="submit"
+                        class="flex-grow bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold py-2 rounded transition">Login</button>
+                    <button type="button" onclick="toggleLoginModal()"
+                        class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Deposit Modal -->
-    <div id="deposit-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
-        <div class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-green-500 border shadow-[0_0_30px_rgba(34,197,94,0.2)]">
+    <div id="deposit-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
+        <div
+            class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-green-500 border shadow-[0_0_30px_rgba(34,197,94,0.2)]">
             <h3 class="text-2xl font-bold text-white mb-2">Deposit Funds</h3>
             <p class="text-sm text-gray-400 mb-6">Add capital to your trading account.</p>
             <form onsubmit="processDeposit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Amount (₹)</label>
-                    <input type="number" id="deposit-amount" min="100" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-green-500" required placeholder="50000">
+                    <input type="number" id="deposit-amount" min="100"
+                        class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-2 focus:outline-none focus:border-green-500"
+                        required placeholder="50000">
                 </div>
                 <div class="pt-2 flex gap-2">
-                    <button type="submit" class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">Confirm Deposit</button>
-                    <button type="button" onclick="toggleDepositModal()" class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
+                    <button type="submit"
+                        class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">Confirm
+                        Deposit</button>
+                    <button type="button" onclick="toggleDepositModal()"
+                        class="px-4 py-2 bg-dark-700 hover:bg-dark-600 text-gray-300 rounded transition">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Trade Execution Modal -->
-    <div id="trade-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
-        <div class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-blue-500 border shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+    <div id="trade-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm transition-opacity p-4">
+        <div
+            class="glass-panel p-6 sm:p-8 rounded-xl max-w-sm w-full border-blue-500 border shadow-[0_0_30px_rgba(59,130,246,0.2)]">
             <h3 id="trade-asset-title" class="text-2xl font-bold text-white mb-1">Trade Asset</h3>
             <p id="trade-asset-price" class="text-sm text-gold-400 mb-6 font-semibold">Current Price: --</p>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Order Value (₹)</label>
-                    <input type="number" id="trade-amount" min="10" class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-3 text-lg focus:outline-none focus:border-blue-500" placeholder="0.00">
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Order Value
+                        (₹)</label>
+                    <input type="number" id="trade-amount" min="10"
+                        class="w-full bg-dark-900 border border-dark-700 text-white rounded px-3 py-3 text-lg focus:outline-none focus:border-blue-500"
+                        placeholder="0.00">
                 </div>
                 <div class="pt-4 flex gap-3">
-                    <button onclick="executeTrade('buy')" class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded transition shadow-lg">Buy / Long</button>
-                    <button onclick="executeTrade('sell')" class="flex-grow bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition shadow-lg">Sell / Short</button>
+                    <button onclick="executeTrade('buy')"
+                        class="flex-grow bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded transition shadow-lg">Buy
+                        / Long</button>
+                    <button onclick="executeTrade('sell')"
+                        class="flex-grow bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition shadow-lg">Sell
+                        / Short</button>
                 </div>
-                <button onclick="closeTradeModal()" class="w-full mt-2 py-2 text-gray-500 hover:text-gray-300 text-sm transition">Cancel Order</button>
+                <button onclick="closeTradeModal()"
+                    class="w-full mt-2 py-2 text-gray-500 hover:text-gray-300 text-sm transition">Cancel Order</button>
             </div>
         </div>
     </div>
@@ -268,19 +332,32 @@
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
                     <i class="fa-solid fa-chart-line text-gold-500 text-3xl mr-3"></i>
-                    <span class="text-xl sm:text-2xl font-bold tracking-wider text-white">TRADE<span class="text-gold-500">VERSE</span></span>
+                    <span class="text-xl sm:text-2xl font-bold tracking-wider text-white">TRADE<span
+                            class="text-gold-500">VERSE</span></span>
                 </div>
                 <div class="hidden lg:block">
                     <div class="ml-10 flex items-baseline space-x-6 xl:space-x-8">
-                        <button onclick="navigateTo('home')" class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="home">Home</button>
-                        <button onclick="navigateTo('markets')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="markets">Markets</button>
-                        <button onclick="navigateTo('community')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="community">Community</button>
-                        <button onclick="navigateTo('ai-chat')" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition" data-target="ai-chat">AI Analyst</button>
-                        <button onclick="navigateTo('premium')" class="px-4 py-2 rounded-md text-sm font-bold bg-gold-600 text-dark-900 hover:bg-gold-500 transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Premium</button>
-                        
+                        <button onclick="navigateTo('home')"
+                            class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition"
+                            data-target="home">Home</button>
+                        <button onclick="navigateTo('markets')"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition"
+                            data-target="markets">Markets</button>
+                        <button onclick="navigateTo('community')"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition"
+                            data-target="community">Community</button>
+                        <button onclick="navigateTo('ai-chat')"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-gold-400 transition"
+                            data-target="ai-chat">AI Analyst</button>
+                        <button onclick="navigateTo('premium')"
+                            class="px-4 py-2 rounded-md text-sm font-bold bg-gold-600 text-dark-900 hover:bg-gold-500 transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Premium</button>
+
                         <!-- Auth Section -->
-                        <div id="auth-wrapper-desktop" class="inline-flex items-center ml-4 border-l border-dark-700 pl-4 space-x-3">
-                            <button onclick="toggleLoginModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i class="fa-solid fa-user mr-2"></i>Login</button>
+                        <div id="auth-wrapper-desktop"
+                            class="inline-flex items-center ml-4 border-l border-dark-700 pl-4 space-x-3">
+                            <button onclick="toggleLoginModal()"
+                                class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i
+                                    class="fa-solid fa-user mr-2"></i>Login</button>
                         </div>
                     </div>
                 </div>
@@ -295,13 +372,20 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden glass-panel border-t border-gold-500/30 absolute w-full z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
-                <button onclick="navigateTo('markets'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
-                <button onclick="navigateTo('community'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Community</button>
-                <button onclick="navigateTo('ai-chat'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">AI Analyst</button>
-                <button onclick="navigateTo('premium'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-base font-bold text-gold-500">Premium</button>
+                <button onclick="navigateTo('home'); toggleMobileMenu()"
+                    class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Home</button>
+                <button onclick="navigateTo('markets'); toggleMobileMenu()"
+                    class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Markets</button>
+                <button onclick="navigateTo('community'); toggleMobileMenu()"
+                    class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">Community</button>
+                <button onclick="navigateTo('ai-chat'); toggleMobileMenu()"
+                    class="block w-full text-left px-3 py-2 text-base font-medium text-white hover:text-gold-400">AI
+                    Analyst</button>
+                <button onclick="navigateTo('premium'); toggleMobileMenu()"
+                    class="block w-full text-left px-3 py-2 text-base font-bold text-gold-500">Premium</button>
                 <div id="auth-wrapper-mobile" class="px-3 py-2 mt-2 border-t border-dark-700 space-y-2">
-                    <button onclick="toggleLoginModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
+                    <button onclick="toggleLoginModal(); toggleMobileMenu()"
+                        class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
                 </div>
             </div>
         </div>
@@ -309,16 +393,19 @@
 
     <!-- Main Content Area -->
     <main class="flex-grow relative">
-        
+
         <!-- HOME PAGE -->
         <section id="page-home" class="page-section">
             <!-- Live Ticker -->
-            <div class="bg-dark-900 border-b border-gold-500/20 overflow-hidden whitespace-nowrap py-2 flex items-center">
-                <div class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 absolute left-0 flex items-center gap-2">
+            <div
+                class="bg-dark-900 border-b border-gold-500/20 overflow-hidden whitespace-nowrap py-2 flex items-center">
+                <div
+                    class="text-gold-500 font-bold px-4 border-r border-gold-500/20 z-10 bg-dark-900 absolute left-0 flex items-center gap-2">
                     <i class="fa-solid fa-bolt text-gold-500"></i> LIVE
                 </div>
                 <div id="live-ticker-track-home" class="inline-block animate-marquee pl-32 text-sm text-gray-300">
-                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Connecting to Live Markets...</span>
+                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Connecting to
+                        Live Markets...</span>
                 </div>
             </div>
 
@@ -326,59 +413,80 @@
             <div class="relative overflow-hidden min-h-[70vh] flex items-center">
                 <!-- Decorative Background Elements -->
                 <div class="absolute inset-0 z-0 overflow-hidden">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.1)_0,rgba(10,10,10,1)_80%)]"></div>
+                    <div
+                        class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.1)_0,rgba(10,10,10,1)_80%)]">
+                    </div>
                     <!-- Floating Bitcoin Icon -->
-                    <div class="absolute top-[15%] left-[5%] lg:left-[10%] animate-float opacity-30 text-gold-500 text-6xl md:text-[150px] rotate-12 blur-[2px]">
+                    <div
+                        class="absolute top-[15%] left-[5%] lg:left-[10%] animate-float opacity-30 text-gold-500 text-6xl md:text-[150px] rotate-12 blur-[2px]">
                         <i class="fa-brands fa-bitcoin"></i>
                     </div>
                     <!-- Floating Ethereum Icon -->
-                    <div class="absolute bottom-[20%] right-[5%] lg:right-[10%] animate-float-delayed opacity-20 text-blue-400 text-5xl md:text-[120px] -rotate-12 blur-[1px]">
+                    <div
+                        class="absolute bottom-[20%] right-[5%] lg:right-[10%] animate-float-delayed opacity-20 text-blue-400 text-5xl md:text-[120px] -rotate-12 blur-[1px]">
                         <i class="fa-brands fa-ethereum"></i>
                     </div>
                     <!-- Floating Chart Icon -->
-                    <div class="absolute top-[30%] right-[15%] lg:right-[25%] animate-float opacity-10 text-green-500 text-5xl md:text-[100px] rotate-6 blur-[3px]">
+                    <div
+                        class="absolute top-[30%] right-[15%] lg:right-[25%] animate-float opacity-10 text-green-500 text-5xl md:text-[100px] rotate-6 blur-[3px]">
                         <i class="fa-solid fa-chart-line"></i>
                     </div>
                 </div>
 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-10 pb-16 text-center w-full">
-                    <div class="inline-flex items-center gap-2 bg-dark-800/80 border border-gold-500/30 text-gold-500 text-[10px] sm:text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full mb-6 sm:mb-8 tracking-widest uppercase backdrop-blur-md">
+                    <div
+                        class="inline-flex items-center gap-2 bg-dark-800/80 border border-gold-500/30 text-gold-500 text-[10px] sm:text-xs font-bold px-3 py-2 sm:px-4 sm:py-2 rounded-full mb-6 sm:mb-8 tracking-widest uppercase backdrop-blur-md">
                         <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-gold-500"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-gold-500"></span>
                         </span>
                         Now with Gemini AI Insights
                     </div>
-                    <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
                         The Hub for <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-yellow-200 to-gold-600 hero-glow">Modern Traders</span>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-yellow-200 to-gold-600 hero-glow">Modern
+                            Traders</span>
                     </h1>
-                    <p class="mt-4 max-w-2xl mx-auto text-base sm:text-xl text-gray-400 mb-8 sm:mb-10 drop-shadow-md px-2">
-                        Tradeverse is your definitive screener for Crypto, the NSE, and Global Forex. Access live data, chat with peers, and execute paper trades risk-free.
+                    <p
+                        class="mt-4 max-w-2xl mx-auto text-base sm:text-xl text-gray-400 mb-8 sm:mb-10 drop-shadow-md px-2">
+                        Tradeverse is your definitive screener for Crypto, the NSE, and Global Forex. Access live data,
+                        chat with peers, and execute paper trades risk-free.
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4">
-                        <button onclick="navigateTo('markets')" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-base sm:text-lg shadow-[0_0_30px_rgba(234,179,8,0.4)] flex items-center justify-center gap-2">
+                        <button onclick="navigateTo('markets')"
+                            class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gold-500 text-dark-900 font-bold rounded-lg hover:bg-gold-400 transition text-base sm:text-lg shadow-[0_0_30px_rgba(234,179,8,0.4)] flex items-center justify-center gap-2">
                             Explore Markets <i class="fa-solid fa-arrow-trend-up"></i>
                         </button>
-                        <button onclick="toggleLoginModal()" id="hero-login-btn" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-base sm:text-lg backdrop-blur-md">
+                        <button onclick="toggleLoginModal()" id="hero-login-btn"
+                            class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-dark-800 border border-gold-500 text-gold-500 font-bold rounded-lg hover:bg-gold-500 hover:text-dark-900 transition text-base sm:text-lg backdrop-blur-md">
                             Start Paper Trading
                         </button>
                     </div>
 
                     <!-- Mini Market Sentiment Widget -->
-                    <div class="mt-12 sm:mt-16 max-w-3xl mx-auto glass-panel p-4 rounded-xl flex items-center justify-around border-gold-500/20 text-xs sm:text-sm">
+                    <div
+                        class="mt-12 sm:mt-16 max-w-3xl mx-auto glass-panel p-4 rounded-xl flex items-center justify-around border-gold-500/20 text-xs sm:text-sm">
                         <div class="text-center px-2">
-                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Global Volume</div>
+                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Global
+                                Volume</div>
                             <div class="font-bold text-white text-base sm:text-lg">$142.8B</div>
                         </div>
                         <div class="w-px h-8 bg-dark-700"></div>
                         <div class="text-center px-2">
-                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Sentiment</div>
-                            <div class="font-bold text-green-500 text-base sm:text-lg flex items-center justify-center gap-1"><i class="fa-solid fa-arrow-up-right-dots"></i> Bullish</div>
+                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Sentiment
+                            </div>
+                            <div
+                                class="font-bold text-green-500 text-base sm:text-lg flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-arrow-up-right-dots"></i> Bullish
+                            </div>
                         </div>
                         <div class="w-px h-8 bg-dark-700"></div>
                         <div class="text-center px-2">
-                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Traders</div>
+                            <div class="text-gray-500 uppercase tracking-widest text-[10px] sm:text-xs mb-1">Traders
+                            </div>
                             <div class="font-bold text-gold-400 text-base sm:text-lg">12,409</div>
                         </div>
                     </div>
@@ -387,87 +495,120 @@
 
             <!-- Ad Banner Section (Home) -->
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/30 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between group cursor-pointer shadow-2xl text-center md:text-left">
+                <div
+                    class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-500/30 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between group cursor-pointer shadow-2xl text-center md:text-left">
                     <div class="absolute inset-0 bg-black opacity-20 group-hover:opacity-10 transition"></div>
                     <div class="relative z-10 mb-4 md:mb-0">
-                        <span class="text-[10px] sm:text-xs font-bold bg-blue-500 text-white px-2 py-1 rounded uppercase tracking-wider mb-2 inline-block">Sponsored</span>
-                        <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Ready for Real Trading? Join Binance.</h3>
-                        <p class="text-sm sm:text-base text-blue-200">Get up to $100 in welcome rewards when you sign up using our exclusive partner link.</p>
+                        <span
+                            class="text-[10px] sm:text-xs font-bold bg-blue-500 text-white px-2 py-1 rounded uppercase tracking-wider mb-2 inline-block">Sponsored</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Ready for Real Trading? Join Binance.
+                        </h3>
+                        <p class="text-sm sm:text-base text-blue-200">Get up to $100 in welcome rewards when you sign up
+                            using our exclusive partner link.</p>
                     </div>
-                    <button class="relative z-10 w-full md:w-auto px-6 py-3 bg-yellow-400 text-black font-bold rounded hover:bg-yellow-300 transition whitespace-nowrap shadow-lg">Claim Reward <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    <button
+                        class="relative z-10 w-full md:w-auto px-6 py-3 bg-yellow-400 text-black font-bold rounded hover:bg-yellow-300 transition whitespace-nowrap shadow-lg">Claim
+                        Reward <i class="fa-solid fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
 
             <!-- Features Grid -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-                <h2 class="text-2xl sm:text-3xl font-bold text-center text-white mb-8 sm:mb-10 border-b border-dark-700 pb-4 inline-block mx-auto">Master Every Asset Class</h2>
+                <h2
+                    class="text-2xl sm:text-3xl font-bold text-center text-white mb-8 sm:mb-10 border-b border-dark-700 pb-4 inline-block mx-auto">
+                    Master Every Asset Class</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-4 sm:mt-6">
-                    <div class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                    <div
+                        class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div
+                            class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-brands fa-bitcoin text-gold-500 text-2xl sm:text-3xl"></i>
                         </div>
                         <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Crypto Wiki</h3>
-                        <p class="text-sm sm:text-base text-gray-400">Deep dive into block-chain technologies, tokenomics, and real-time charts of leading digital assets. From BTC to altcoins.</p>
+                        <p class="text-sm sm:text-base text-gray-400">Deep dive into block-chain technologies,
+                            tokenomics, and real-time charts of leading digital assets. From BTC to altcoins.</p>
                     </div>
-                    <div class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                    <div
+                        class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div
+                            class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-solid fa-building-columns text-gold-500 text-2xl sm:text-3xl"></i>
                         </div>
                         <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">NSE India</h3>
-                        <p class="text-sm sm:text-base text-gray-400">Track India's booming economy. Analyze top equities from Nifty 50 to emerging mid-caps instantly with precision tools.</p>
+                        <p class="text-sm sm:text-base text-gray-400">Track India's booming economy. Analyze top
+                            equities from Nifty 50 to emerging mid-caps instantly with precision tools.</p>
                     </div>
-                    <div class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                    <div
+                        class="glass-panel p-6 sm:p-8 rounded-2xl text-center transform transition duration-300 hover:-translate-y-2 hover:border-gold-500/50">
+                        <div
+                            class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-dark-800 rounded-full flex items-center justify-center border border-gold-500 mb-4 sm:mb-6 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                             <i class="fa-solid fa-money-bill-trend-up text-gold-500 text-2xl sm:text-3xl"></i>
                         </div>
                         <h3 class="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-3">Forex Hub</h3>
-                        <p class="text-sm sm:text-base text-gray-400">Monitor major and minor fiat pairs. Keep a pulse on global macroeconomic shifts affecting exchange rates 24/5.</p>
+                        <p class="text-sm sm:text-base text-gray-400">Monitor major and minor fiat pairs. Keep a pulse
+                            on global macroeconomic shifts affecting exchange rates 24/5.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- MARKETS DASHBOARD PAGE -->
-        <section id="page-markets" class="page-section hidden max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col">
-            
+        <section id="page-markets"
+            class="page-section hidden max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col">
+
             <!-- Live Ticker (Markets) -->
-            <div class="bg-dark-900 border border-gold-500/20 rounded-lg overflow-hidden whitespace-nowrap py-2 flex items-center mb-4 sm:mb-6">
-                <div class="text-gold-500 font-bold px-3 sm:px-4 border-r border-gold-500/20 z-10 bg-dark-900 shadow-[5px_0_10px_rgba(10,10,10,1)] flex items-center gap-2 text-xs sm:text-base">
+            <div
+                class="bg-dark-900 border border-gold-500/20 rounded-lg overflow-hidden whitespace-nowrap py-2 flex items-center mb-4 sm:mb-6">
+                <div
+                    class="text-gold-500 font-bold px-3 sm:px-4 border-r border-gold-500/20 z-10 bg-dark-900 shadow-[5px_0_10px_rgba(10,10,10,1)] flex items-center gap-2 text-xs sm:text-base">
                     <i class="fa-solid fa-satellite-dish text-gold-500 animate-pulse"></i> LIVE
                 </div>
-                <div id="live-ticker-track-markets" class="inline-block animate-marquee text-xs sm:text-sm text-gray-300 w-full">
-                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Syncing Data Streams...</span>
+                <div id="live-ticker-track-markets"
+                    class="inline-block animate-marquee text-xs sm:text-sm text-gray-300 w-full">
+                    <span class="mx-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 mr-2"></i> Syncing Data
+                        Streams...</span>
                 </div>
             </div>
 
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 sm:mb-6 gap-3">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gold-500"><i class="fa-solid fa-chart-line mr-2"></i> Data Screener & Charts</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gold-500"><i class="fa-solid fa-chart-line mr-2"></i>
+                    Data Screener & Charts</h2>
                 <!-- Small ad in markets header -->
-                <div class="w-full md:w-auto bg-dark-800 border border-dark-700 text-xs px-4 py-2 rounded text-gray-400 text-center md:text-left">
-                    <span class="text-gold-500 font-bold">Ad:</span> Zero-fee crypto trading on <a href="#" class="text-blue-400 hover:underline">PartnerEx</a>
+                <div
+                    class="w-full md:w-auto bg-dark-800 border border-dark-700 text-xs px-4 py-2 rounded text-gray-400 text-center md:text-left">
+                    <span class="text-gold-500 font-bold">Ad:</span> Zero-fee crypto trading on <a href="#"
+                        class="text-blue-400 hover:underline">PartnerEx</a>
                 </div>
             </div>
-            
+
             <!-- Market Forums Toggle -->
             <div class="flex space-x-2 mb-4 sm:mb-6 border-b border-dark-700 pb-2 overflow-x-auto custom-scrollbar">
-                <button onclick="switchMarket('crypto')" id="tab-crypto" class="market-tab active px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold transition whitespace-nowrap"><i class="fa-brands fa-bitcoin mr-2"></i>Crypto</button>
-                <button onclick="switchMarket('nse')" id="tab-nse" class="market-tab px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i class="fa-solid fa-building-columns mr-2"></i>NSE</button>
-                <button onclick="switchMarket('forex')" id="tab-forex" class="market-tab px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i class="fa-solid fa-money-bill-trend-up mr-2"></i>Forex</button>
+                <button onclick="switchMarket('crypto')" id="tab-crypto"
+                    class="market-tab active px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold transition whitespace-nowrap"><i
+                        class="fa-brands fa-bitcoin mr-2"></i>Crypto</button>
+                <button onclick="switchMarket('nse')" id="tab-nse"
+                    class="market-tab px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i
+                        class="fa-solid fa-building-columns mr-2"></i>NSE</button>
+                <button onclick="switchMarket('forex')" id="tab-forex"
+                    class="market-tab px-4 sm:px-6 py-2 rounded-t-lg text-sm sm:text-base font-semibold text-gray-400 hover:text-gold-400 transition whitespace-nowrap"><i
+                        class="fa-solid fa-money-bill-trend-up mr-2"></i>Forex</button>
             </div>
 
             <!-- Messari Style Dashboard Layout with Mobile Height Fixes -->
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:h-[75vh] lg:min-h-[600px]">
-                
+
                 <!-- LEFT: Asset Data Table Screener -->
                 <!-- Mobile Fix: Fixed height block on small screens so it scrolls instead of squashing the chart -->
-                <div class="lg:col-span-1 flex flex-col glass-panel rounded-xl overflow-hidden border border-gold-500/20 h-[350px] lg:h-auto order-2 lg:order-1">
+                <div
+                    class="lg:col-span-1 flex flex-col glass-panel rounded-xl overflow-hidden border border-gold-500/20 h-[350px] lg:h-auto order-2 lg:order-1">
                     <div class="bg-dark-800 p-3 border-b border-dark-700 flex justify-between items-center shrink-0">
                         <span class="font-bold text-sm text-gray-200">Asset Screener</span>
                         <i class="fa-solid fa-filter text-gray-500 text-xs cursor-pointer hover:text-gold-500"></i>
                     </div>
                     <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow bg-dark-900/50">
                         <table class="w-full text-left text-sm text-gray-300">
-                            <thead class="text-xs text-gray-500 bg-dark-900 sticky top-0 z-10 border-b border-dark-700 shadow-sm">
+                            <thead
+                                class="text-xs text-gray-500 bg-dark-900 sticky top-0 z-10 border-b border-dark-700 shadow-sm">
                                 <tr>
                                     <th class="px-4 py-3 font-semibold">Asset Name</th>
                                     <th class="px-3 py-3 font-semibold text-right">Action</th>
@@ -479,16 +620,20 @@
                         </table>
                     </div>
                     <!-- Login Prompt overlay if logged out -->
-                    <div id="screener-login-prompt" class="p-3 sm:p-4 text-center border-t border-dark-800 bg-dark-900 shrink-0">
+                    <div id="screener-login-prompt"
+                        class="p-3 sm:p-4 text-center border-t border-dark-800 bg-dark-900 shrink-0">
                         <p class="text-[10px] sm:text-xs text-gray-500 mb-1 sm:mb-2">Want to execute paper trades?</p>
-                        <button onclick="toggleLoginModal()" class="text-xs text-gold-500 hover:text-gold-400 font-bold underline">Login to Trade</button>
+                        <button onclick="toggleLoginModal()"
+                            class="text-xs text-gold-500 hover:text-gold-400 font-bold underline">Login to
+                            Trade</button>
                     </div>
                 </div>
 
                 <!-- CENTER: Chart Container -->
                 <!-- Mobile Fix: Guaranteed height on mobile so TradingView widget renders properly -->
                 <div class="lg:col-span-2 flex flex-col h-[400px] sm:h-[500px] lg:h-auto order-1 lg:order-2">
-                    <div class="glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative w-full h-full shadow-lg" id="tv_chart_container">
+                    <div class="glass-panel rounded-xl overflow-hidden border border-gold-500/20 relative w-full h-full shadow-lg"
+                        id="tv_chart_container">
                         <!-- TradingView Widget injects here -->
                     </div>
                 </div>
@@ -496,17 +641,21 @@
                 <!-- RIGHT: Market Specific News Section & Sentiment -->
                 <!-- Mobile Fix: Fixed height block on small screens -->
                 <div class="lg:col-span-1 flex flex-col h-[400px] lg:h-auto order-3">
-                    <div class="glass-panel rounded-xl border border-gold-500/20 p-3 sm:p-4 h-full flex flex-col bg-dark-900/80">
-                        
-                        <div class="border-b border-dark-700 pb-3 mb-3 sm:mb-4 flex items-center justify-between shrink-0">
+                    <div
+                        class="glass-panel rounded-xl border border-gold-500/20 p-3 sm:p-4 h-full flex flex-col bg-dark-900/80">
+
+                        <div
+                            class="border-b border-dark-700 pb-3 mb-3 sm:mb-4 flex items-center justify-between shrink-0">
                             <h3 class="text-base sm:text-lg font-bold text-white flex items-center">
                                 <i class="fa-solid fa-newspaper text-gold-500 mr-2"></i> Live News
                             </h3>
-                            <span id="news-badge" class="text-[10px] bg-gold-500 text-dark-900 px-2 py-1 rounded font-bold uppercase tracking-wider">CRYPTO</span>
+                            <span id="news-badge"
+                                class="text-[10px] bg-gold-500 text-dark-900 px-2 py-1 rounded font-bold uppercase tracking-wider">CRYPTO</span>
                         </div>
-                        
+
                         <!-- Gemini LLM Feature Button -->
-                        <button onclick="analyzeNewsSentiment()" id="btn-analyze-sentiment" class="shrink-0 w-full mb-3 py-2 bg-dark-800 hover:bg-dark-700 border border-gold-500/50 text-gold-400 text-xs sm:text-sm font-semibold rounded transition flex items-center justify-center gap-2 group shadow-[0_0_10px_rgba(234,179,8,0.1)]">
+                        <button onclick="analyzeNewsSentiment()" id="btn-analyze-sentiment"
+                            class="shrink-0 w-full mb-3 py-2 bg-dark-800 hover:bg-dark-700 border border-gold-500/50 text-gold-400 text-xs sm:text-sm font-semibold rounded transition flex items-center justify-center gap-2 group shadow-[0_0_10px_rgba(234,179,8,0.1)]">
                             <i class="fa-solid fa-sparkles text-gold-500 group-hover:animate-pulse"></i>
                             Analyze Market Sentiment
                         </button>
@@ -520,13 +669,17 @@
         </section>
 
         <!-- USER DASHBOARD PAGE -->
-        <section id="page-dashboard" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col min-h-[calc(100vh-80px)]">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gold-500/30 pb-4 mb-6 gap-4">
+        <section id="page-dashboard"
+            class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col min-h-[calc(100vh-80px)]">
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gold-500/30 pb-4 mb-6 gap-4">
                 <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-white"><i class="fa-solid fa-address-card text-gold-500 mr-3"></i>User Dashboard</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white"><i
+                            class="fa-solid fa-address-card text-gold-500 mr-3"></i>User Dashboard</h2>
                     <p class="text-gray-400 text-xs sm:text-sm mt-1" id="dash-greeting">Welcome back, Trader.</p>
                 </div>
-                <button onclick="toggleDepositModal()" class="w-full sm:w-auto px-5 py-2 sm:py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                <button onclick="toggleDepositModal()"
+                    class="w-full sm:w-auto px-5 py-2 sm:py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                     <i class="fa-solid fa-plus mr-2"></i>Deposit Funds
                 </button>
             </div>
@@ -535,16 +688,19 @@
                 <!-- Left Column: Balances & Portfolio -->
                 <div class="lg:col-span-1 space-y-6">
                     <!-- Account Summary Card -->
-                    <div class="glass-panel p-5 sm:p-6 rounded-2xl border-gold-500/50 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
-                        <h3 class="text-gray-400 text-xs sm:text-sm font-bold uppercase tracking-wider mb-4">Account Summary</h3>
-                        
+                    <div
+                        class="glass-panel p-5 sm:p-6 rounded-2xl border-gold-500/50 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
+                        <h3 class="text-gray-400 text-xs sm:text-sm font-bold uppercase tracking-wider mb-4">Account
+                            Summary</h3>
+
                         <div class="mb-4">
                             <p class="text-[10px] sm:text-xs text-gray-500 mb-1">Total Portfolio Value (Est. INR)</p>
-                            <p class="text-3xl sm:text-4xl font-extrabold text-white break-words" id="dash-total-value">₹0.00</p>
+                            <p class="text-3xl sm:text-4xl font-extrabold text-white break-words" id="dash-total-value">
+                                ₹0.00</p>
                         </div>
-                        
+
                         <div class="w-full h-px bg-dark-700 my-4"></div>
-                        
+
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-xs sm:text-sm text-gray-400">Available Cash</span>
                             <span class="font-bold text-green-400" id="dash-available-cash">₹0.00</span>
@@ -558,7 +714,8 @@
                     <!-- Current Holdings -->
                     <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-[300px] sm:h-[400px]">
                         <div class="bg-dark-800 p-3 sm:p-4 border-b border-dark-700 shrink-0">
-                            <h3 class="text-gray-200 text-xs sm:text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-briefcase text-gold-500 mr-2"></i>Current Holdings</h3>
+                            <h3 class="text-gray-200 text-xs sm:text-sm font-bold uppercase tracking-wider"><i
+                                    class="fa-solid fa-briefcase text-gold-500 mr-2"></i>Current Holdings</h3>
                         </div>
                         <div class="overflow-y-auto custom-scrollbar flex-grow p-3 sm:p-4">
                             <div id="dash-holdings-list" class="space-y-3 sm:space-y-4">
@@ -571,9 +728,13 @@
 
                 <!-- Right Column: Transaction History -->
                 <div class="lg:col-span-2 glass-panel p-0 rounded-2xl overflow-hidden flex flex-col min-h-[400px]">
-                    <div class="bg-dark-800 p-3 sm:p-4 border-b border-dark-700 flex justify-between items-center shrink-0">
-                        <h3 class="text-gray-200 text-xs sm:text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-clock-rotate-left text-gold-500 mr-2"></i>Transaction History</h3>
-                        <span class="text-[10px] sm:text-xs bg-dark-900 border border-dark-600 px-2 py-1 rounded text-gray-400">Paper Trades</span>
+                    <div
+                        class="bg-dark-800 p-3 sm:p-4 border-b border-dark-700 flex justify-between items-center shrink-0">
+                        <h3 class="text-gray-200 text-xs sm:text-sm font-bold uppercase tracking-wider"><i
+                                class="fa-solid fa-clock-rotate-left text-gold-500 mr-2"></i>Transaction History</h3>
+                        <span
+                            class="text-[10px] sm:text-xs bg-dark-900 border border-dark-600 px-2 py-1 rounded text-gray-400">Paper
+                            Trades</span>
                     </div>
                     <div class="overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
                         <table class="w-full text-left text-xs sm:text-sm text-gray-300 min-w-[500px]">
@@ -588,7 +749,10 @@
                             </thead>
                             <tbody id="dash-history-body" class="divide-y divide-dark-800/50">
                                 <!-- History injected here -->
-                                <tr><td colspan="5" class="text-center py-8 text-gray-500">No transactions yet. Start trading in the Markets dashboard!</td></tr>
+                                <tr>
+                                    <td colspan="5" class="text-center py-8 text-gray-500">No transactions yet. Start
+                                        trading in the Markets dashboard!</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -597,32 +761,44 @@
         </section>
 
         <!-- COMMUNITY CHAT PAGE -->
-        <section id="page-community" class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 h-[calc(100vh-80px)]">
+        <section id="page-community"
+            class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 h-[calc(100vh-80px)]">
             <div class="glass-panel border border-gold-500/30 rounded-2xl h-full flex flex-col">
-                <div class="p-3 sm:p-4 border-b border-gold-500/30 bg-dark-800/50 rounded-t-2xl flex justify-between items-center shrink-0">
-                    <h2 class="text-lg sm:text-xl font-bold text-white"><i class="fa-solid fa-users text-gold-500 mr-2"></i> Community</h2>
-                    <span class="text-[10px] sm:text-xs font-semibold px-2 py-1 bg-green-500/20 text-green-400 rounded-full">● 1,204 Online</span>
+                <div
+                    class="p-3 sm:p-4 border-b border-gold-500/30 bg-dark-800/50 rounded-t-2xl flex justify-between items-center shrink-0">
+                    <h2 class="text-lg sm:text-xl font-bold text-white"><i
+                            class="fa-solid fa-users text-gold-500 mr-2"></i> Community</h2>
+                    <span
+                        class="text-[10px] sm:text-xs font-semibold px-2 py-1 bg-green-500/20 text-green-400 rounded-full">●
+                        1,204 Online</span>
                 </div>
-                
+
                 <div id="community-messages" class="flex-grow p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4">
                     <!-- Chat messages -->
                     <div class="flex items-start mb-4">
-                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3 border border-gray-600 shrink-0">JD</div>
+                        <div
+                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3 border border-gray-600 shrink-0">
+                            JD</div>
                         <div>
                             <div class="bg-dark-700 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-tl-none">
                                 <span class="text-[10px] sm:text-xs text-gold-400 font-bold block mb-1">John Doe</span>
-                                <p class="text-xs sm:text-sm">Anyone tracking the Reliance breakout on the daily chart? Looks promising.</p>
+                                <p class="text-xs sm:text-sm">Anyone tracking the Reliance breakout on the daily chart?
+                                    Looks promising.</p>
                             </div>
                             <span class="text-[10px] sm:text-xs text-gray-500 mt-1 ml-1">10:42 AM</span>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-start mb-4">
-                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-600 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3 border border-gray-600 shrink-0">AT</div>
+                        <div
+                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-600 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3 border border-gray-600 shrink-0">
+                            AT</div>
                         <div>
                             <div class="bg-dark-700 px-3 py-2 sm:px-4 sm:py-2 rounded-2xl rounded-tl-none">
-                                <span class="text-[10px] sm:text-xs text-gold-400 font-bold block mb-1">CryptoNinja</span>
-                                <p class="text-xs sm:text-sm">BTC is consolidating below $65k. Waiting for volume to pick up before longing.</p>
+                                <span
+                                    class="text-[10px] sm:text-xs text-gold-400 font-bold block mb-1">CryptoNinja</span>
+                                <p class="text-xs sm:text-sm">BTC is consolidating below $65k. Waiting for volume to
+                                    pick up before longing.</p>
                             </div>
                             <span class="text-[10px] sm:text-xs text-gray-500 mt-1 ml-1">10:45 AM</span>
                         </div>
@@ -631,18 +807,26 @@
 
                 <div class="p-3 sm:p-4 border-t border-gold-500/30 bg-dark-800/50 rounded-b-2xl shrink-0">
                     <form id="community-form" class="flex gap-2" onsubmit="sendCommunityMessage(event)">
-                        <input type="text" id="community-input" class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-gold-500 transition" placeholder="Share insights..." required>
-                        <button type="submit" class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition"><i class="fa-solid fa-paper-plane"></i></button>
+                        <input type="text" id="community-input"
+                            class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:outline-none focus:border-gold-500 transition"
+                            placeholder="Share insights..." required>
+                        <button type="submit"
+                            class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition"><i
+                                class="fa-solid fa-paper-plane"></i></button>
                     </form>
                 </div>
             </div>
         </section>
 
         <!-- AI CHATBOT PAGE -->
-        <section id="page-ai-chat" class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 h-[calc(100vh-80px)]">
-            <div class="glass-panel border border-gold-500/50 rounded-2xl h-full flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.1)]">
-                <div class="p-4 sm:p-5 border-b border-gold-500/30 bg-dark-800/80 rounded-t-2xl flex items-center gap-3 sm:gap-4 shrink-0">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold-500 flex items-center justify-center border-2 border-white shadow-[0_0_10px_rgba(234,179,8,0.5)] shrink-0">
+        <section id="page-ai-chat"
+            class="page-section hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 h-[calc(100vh-80px)]">
+            <div
+                class="glass-panel border border-gold-500/50 rounded-2xl h-full flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.1)]">
+                <div
+                    class="p-4 sm:p-5 border-b border-gold-500/30 bg-dark-800/80 rounded-t-2xl flex items-center gap-3 sm:gap-4 shrink-0">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold-500 flex items-center justify-center border-2 border-white shadow-[0_0_10px_rgba(234,179,8,0.5)] shrink-0">
                         <i class="fa-solid fa-robot text-dark-900 text-lg sm:text-xl"></i>
                     </div>
                     <div>
@@ -650,23 +834,31 @@
                         <p class="text-[10px] sm:text-xs text-gold-400">Powered by Gemini AI • Always active</p>
                     </div>
                 </div>
-                
-                <div id="ai-messages" class="flex-grow p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4 sm:space-y-6">
+
+                <div id="ai-messages"
+                    class="flex-grow p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4 sm:space-y-6">
                     <!-- AI Welcome Message -->
                     <div class="flex items-start">
-                        <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-2 sm:mr-3 mt-1">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-2 sm:mr-3 mt-1">
                             <i class="fa-solid fa-robot text-dark-900 text-xs"></i>
                         </div>
-                        <div class="bg-dark-800 border border-gold-500/20 text-gray-200 px-4 py-3 sm:px-5 sm:py-3 rounded-2xl rounded-tl-none max-w-[85%] text-xs sm:text-sm leading-relaxed">
-                            Hello! I am the Tradeverse AI Analyst. I can answer questions about Cryptocurrency fundamentals, NSE stock histories, Forex concepts, and general trading strategies. How can I assist your trading journey today?
+                        <div
+                            class="bg-dark-800 border border-gold-500/20 text-gray-200 px-4 py-3 sm:px-5 sm:py-3 rounded-2xl rounded-tl-none max-w-[85%] text-xs sm:text-sm leading-relaxed">
+                            Hello! I am the Tradeverse AI Analyst. I can answer questions about Cryptocurrency
+                            fundamentals, NSE stock histories, Forex concepts, and general trading strategies. How can I
+                            assist your trading journey today?
                         </div>
                     </div>
                 </div>
 
                 <div class="p-3 sm:p-4 border-t border-gold-500/30 bg-dark-800/50 rounded-b-2xl shrink-0">
                     <form id="ai-form" class="flex flex-col sm:flex-row gap-2" onsubmit="sendAiMessage(event)">
-                        <input type="text" id="ai-input" class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-3 py-3 sm:px-4 sm:py-3 text-sm focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition" placeholder="Ask about stocks, crypto, or strategies..." required>
-                        <button type="submit" id="ai-submit-btn" class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-4 py-3 sm:px-6 sm:py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <input type="text" id="ai-input"
+                            class="flex-grow bg-dark-900 border border-dark-700 text-white rounded-lg px-3 py-3 sm:px-4 sm:py-3 text-sm focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition"
+                            placeholder="Ask about stocks, crypto, or strategies..." required>
+                        <button type="submit" id="ai-submit-btn"
+                            class="bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold px-4 py-3 sm:px-6 sm:py-3 rounded-lg transition flex items-center justify-center gap-2">
                             <span>Ask AI</span>
                             <i class="fa-solid fa-sparkles"></i>
                         </button>
@@ -679,47 +871,71 @@
         <section id="page-premium" class="page-section hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
             <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-3 sm:mb-4">Elevate Your Trading Edge</h2>
-                <p class="text-base sm:text-xl text-gray-400 px-2">Join the Tradeverse Elite. Get advanced indicators, priority AI access, and exclusive forum channels.</p>
+                <p class="text-base sm:text-xl text-gray-400 px-2">Join the Tradeverse Elite. Get advanced indicators,
+                    priority AI access, and exclusive forum channels.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
                 <!-- Basic Tier -->
                 <div class="glass-panel rounded-2xl p-6 sm:p-8 border border-dark-700 flex flex-col">
                     <h3 class="text-xl sm:text-2xl font-bold text-gray-300 mb-2">Retail Trader</h3>
-                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹0 <span class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
+                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹0 <span
+                            class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
                     <ul class="space-y-3 sm:space-y-4 mb-8 flex-grow text-sm sm:text-base">
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Basic Live Charts</li>
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Public Community Chat</li>
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Standard AI Access</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Basic Live Charts</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Public Community Chat</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Standard AI Access</li>
                     </ul>
-                    <button class="w-full py-3 rounded-lg border border-gray-600 text-gray-300 font-bold bg-dark-800 cursor-not-allowed">Current Plan</button>
+                    <button
+                        class="w-full py-3 rounded-lg border border-gray-600 text-gray-300 font-bold bg-dark-800 cursor-not-allowed">Current
+                        Plan</button>
                 </div>
 
                 <!-- Pro Tier (Gold) -->
-                <div class="glass-panel rounded-2xl p-6 sm:p-8 border-2 border-gold-500 relative transform md:-translate-y-4 flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.2)]">
-                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gold-500 text-dark-900 px-3 py-1 sm:px-4 sm:py-1 rounded-full text-[10px] sm:text-sm font-bold tracking-wide whitespace-nowrap">MOST POPULAR</div>
+                <div
+                    class="glass-panel rounded-2xl p-6 sm:p-8 border-2 border-gold-500 relative transform md:-translate-y-4 flex flex-col shadow-[0_0_30px_rgba(234,179,8,0.2)]">
+                    <div
+                        class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gold-500 text-dark-900 px-3 py-1 sm:px-4 sm:py-1 rounded-full text-[10px] sm:text-sm font-bold tracking-wide whitespace-nowrap">
+                        MOST POPULAR</div>
                     <h3 class="text-xl sm:text-2xl font-bold text-gold-400 mb-2 mt-2 sm:mt-0">Pro Trader</h3>
-                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹1,499 <span class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
+                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹1,499 <span
+                            class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
                     <ul class="space-y-3 sm:space-y-4 mb-8 flex-grow text-sm sm:text-base">
-                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Multiple Chart Layouts</li>
-                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Priority AI Analyst Processing</li>
-                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Exclusive VIP Discord/Chat</li>
-                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i> Premium News Feeds</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i>
+                            Multiple Chart Layouts</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i>
+                            Priority AI Analyst Processing</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i>
+                            Exclusive VIP Discord/Chat</li>
+                        <li class="flex items-center text-gray-200"><i class="fa-solid fa-check text-gold-500 mr-3"></i>
+                            Premium News Feeds</li>
                     </ul>
-                    <button onclick="openPaymentModal('Pro Trader', 1499)" class="w-full py-3 rounded-lg bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Subscribe Now</button>
+                    <button onclick="openPaymentModal('Pro Trader', 1499)"
+                        class="w-full py-3 rounded-lg bg-gold-600 hover:bg-gold-500 text-dark-900 font-bold transition shadow-[0_0_15px_rgba(234,179,8,0.4)]">Subscribe
+                        Now</button>
                 </div>
 
                 <!-- Institutional Tier -->
                 <div class="glass-panel rounded-2xl p-6 sm:p-8 border border-dark-700 flex flex-col">
                     <h3 class="text-xl sm:text-2xl font-bold text-gray-300 mb-2">Institutional</h3>
-                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹9,999 <span class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
+                    <div class="text-3xl sm:text-4xl font-bold text-white mb-6">₹9,999 <span
+                            class="text-sm sm:text-lg text-gray-500 font-normal">/mo</span></div>
                     <ul class="space-y-3 sm:space-y-4 mb-8 flex-grow text-sm sm:text-base">
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Everything in Pro</li>
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Direct API Access</li>
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> 1-on-1 Trading Mentorship</li>
-                        <li class="flex items-center text-gray-400"><i class="fa-solid fa-check text-green-500 mr-3"></i> Algorithmic Trading Bot setup</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Everything in Pro</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Direct API Access</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> 1-on-1 Trading Mentorship</li>
+                        <li class="flex items-center text-gray-400"><i
+                                class="fa-solid fa-check text-green-500 mr-3"></i> Algorithmic Trading Bot setup</li>
                     </ul>
-                    <button onclick="openPaymentModal('Institutional', 9999)" class="w-full py-3 rounded-lg border border-gold-500 text-gold-500 font-bold hover:bg-gold-500 hover:text-dark-900 transition">Subscribe Now</button>
+                    <button onclick="openPaymentModal('Institutional', 9999)"
+                        class="w-full py-3 rounded-lg border border-gold-500 text-gold-500 font-bold hover:bg-gold-500 hover:text-dark-900 transition">Subscribe
+                        Now</button>
                 </div>
             </div>
         </section>
@@ -729,27 +945,32 @@
     <!-- Global Ad Banner Footer -->
     <div class="bg-dark-900 border-t border-dark-700 py-3 sm:py-4 text-center px-2">
         <p class="text-xs sm:text-sm text-gray-400">
-            <span class="bg-dark-700 px-2 py-1 rounded text-[10px] sm:text-xs mr-1 sm:mr-2 border border-dark-600">AD</span>
-            Protect your digital assets with <strong class="text-gold-400 cursor-pointer hover:underline">Ledger Hardware Wallets</strong>. Get 20% off today.
+            <span
+                class="bg-dark-700 px-2 py-1 rounded text-[10px] sm:text-xs mr-1 sm:mr-2 border border-dark-600">AD</span>
+            Protect your digital assets with <strong class="text-gold-400 cursor-pointer hover:underline">Ledger
+                Hardware Wallets</strong>. Get 20% off today.
         </p>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-dark-800 py-6 sm:py-8 text-center text-gray-500 text-xs sm:text-sm mt-auto px-4">
+    <footer
+        class="bg-black border-t border-dark-800 py-6 sm:py-8 text-center text-gray-500 text-xs sm:text-sm mt-auto px-4">
         <p>&copy; 2026 Tradeverse. All Rights Reserved.</p>
-        <p class="mt-2 text-[10px] sm:text-xs">Trading involves high risk. This platform is for educational/paper-trading purposes only.</p>
+        <p class="mt-2 text-[10px] sm:text-xs">Trading involves high risk. This platform is for
+            educational/paper-trading purposes only.</p>
         <div class="creator-credit">
-            Made with <i class="fa-solid fa-heart text-red-500 animate-pulse text-xs"></i> by <span class="creator-name">Vedant Kapse</span>
+            Made with <i class="fa-solid fa-heart text-red-500 animate-pulse text-xs"></i> by <span
+                class="creator-name">Vedant Kapse</span>
         </div>
     </footer>
 
     <script>
         /* --- GLOBAL & UTILS --- */
-        const apiKey = ""; // API key injected by environment
+        const apiKey = "AIzaSyYourRealApiKeyGoesHere123456789"; // API key injected by environment
         let tvWidget = null;
         let activeMarket = 'crypto';
-        
-        let userAccount = null; 
+
+        let userAccount = null;
         let selectedTradeAsset = null;
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -777,23 +998,23 @@
 
         /* --- NAVIGATION --- */
         function navigateTo(pageId) {
-            if(pageId === 'dashboard' && !userAccount) {
+            if (pageId === 'dashboard' && !userAccount) {
                 toggleLoginModal();
                 return;
             }
 
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            
+
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
-                if(link.getAttribute('data-target') === pageId) {
+                if (link.getAttribute('data-target') === pageId) {
                     link.classList.add('active');
                 }
             });
 
             if (pageId === 'markets') {
-                if(!tvWidget) switchMarket('crypto');
+                if (!tvWidget) switchMarket('crypto');
             } else if (pageId === 'dashboard') {
                 updateDashboardUI();
             }
@@ -874,7 +1095,7 @@
 
         function switchMarket(marketType) {
             activeMarket = marketType;
-            
+
             document.querySelectorAll('.market-tab').forEach(tab => {
                 tab.classList.remove('active', 'text-dark-900', 'bg-gold-500');
                 tab.classList.add('text-gray-400');
@@ -882,23 +1103,23 @@
             const activeTab = document.getElementById(`tab-${marketType}`);
             activeTab.classList.add('active');
             activeTab.classList.remove('text-gray-400');
-            
+
             document.getElementById('news-badge').innerText = marketType.toUpperCase();
 
             const tableBody = document.getElementById('asset-table-body');
             tableBody.innerHTML = '';
-            
+
             const loginPrompt = document.getElementById('screener-login-prompt');
-            if(userAccount) {
-                if(loginPrompt) loginPrompt.classList.add('hidden');
+            if (userAccount) {
+                if (loginPrompt) loginPrompt.classList.add('hidden');
             } else {
-                if(loginPrompt) loginPrompt.classList.remove('hidden');
+                if (loginPrompt) loginPrompt.classList.remove('hidden');
             }
-            
+
             marketData[marketType].forEach((asset, index) => {
                 const tr = document.createElement('tr');
                 tr.className = `asset-row border-b border-dark-800/50 ${index === 0 ? 'active' : ''}`;
-                
+
                 const tradeBtnHtml = userAccount ? `<button onclick="openTradeModal('${asset.name}', '${asset.ticker}')" class="text-xs bg-green-600/10 hover:bg-green-600 text-green-500 hover:text-white border border-green-600/30 px-2 sm:px-3 py-1 rounded transition">Trade</button>` : '';
 
                 tr.innerHTML = `
@@ -918,7 +1139,7 @@
 
             const newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';
-            
+
             newsData[marketType].forEach(news => {
                 const newsHTML = `
                     <a href="${news.url}" target="_blank" class="block news-card bg-dark-800/80 border border-dark-700 p-3 rounded-lg cursor-pointer transition-all duration-300">
@@ -932,7 +1153,7 @@
                 newsContainer.insertAdjacentHTML('beforeend', newsHTML);
             });
 
-            if(marketData[marketType].length > 0) {
+            if (marketData[marketType].length > 0) {
                 initTradingView(marketData[marketType][0].symbol);
             }
         }
@@ -967,9 +1188,9 @@
         /* --- NEW GEMINI API FEATURES --- */
         async function analyzeAsset(assetName) {
             const prompt = `Act as an expert financial analyst. Provide a brief, 2-sentence fundamental analysis of the financial asset "${assetName}". What is its current overarching market narrative?`;
-            
+
             showModal(`<div class="flex flex-col items-center py-4"><i class="fa-solid fa-circle-notch fa-spin text-gold-500 text-3xl sm:text-4xl mb-4"></i><p class="text-sm">Consulting Gemini AI regarding <strong>${assetName}</strong>...</p></div>`, `✨ AI Insight: ${assetName}`);
-            
+
             try {
                 const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const response = await fetchWithRetry(endpoint, {
@@ -980,7 +1201,7 @@
 
                 const data = await response.json();
                 let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if(!text) throw new Error("Empty response");
+                if (!text) throw new Error("Empty response");
 
                 text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400">$1</strong>').replace(/\n/g, '<br/>');
                 showModal(`<div class="text-xs sm:text-sm border-l-4 border-gold-500 pl-3 sm:pl-4 py-2">${text}</div>`, `✨ AI Insight: ${assetName}`);
@@ -993,7 +1214,7 @@
         async function analyzeNewsSentiment() {
             const btn = document.getElementById('btn-analyze-sentiment');
             const originalHTML = btn.innerHTML;
-            
+
             const currentHeadlines = newsData[activeMarket].map(n => n.title).join(" | ");
             const prompt = `Act as an expert financial analyst. Analyze these current news headlines for the ${activeMarket.toUpperCase()} market: "${currentHeadlines}". Provide a 2-3 sentence summary of the overall market sentiment (Is it strongly bullish, slightly bullish, neutral, slightly bearish, or strongly bearish, and why?). Format your response starting with the bolded sentiment state.`;
 
@@ -1010,7 +1231,7 @@
 
                 const data = await response.json();
                 let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if(!text) throw new Error("Empty response");
+                if (!text) throw new Error("Empty response");
 
                 text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400 text-base sm:text-lg">$1</strong>').replace(/\n/g, '<br/>');
                 showModal(`<div class="text-xs sm:text-sm bg-dark-800 p-3 sm:p-4 rounded-lg border border-gold-500/30">${text}</div>`, `✨ ${activeMarket.toUpperCase()} Sentiment`);
@@ -1045,11 +1266,11 @@
             e.preventDefault();
             const input = document.getElementById('ai-input');
             const userText = input.value.trim();
-            if(!userText) return;
+            if (!userText) return;
 
             const chatContainer = document.getElementById('ai-messages');
             const submitBtn = document.getElementById('ai-submit-btn');
-            
+
             const userMsgHTML = `
                 <div class="flex items-start justify-end mb-4">
                     <div class="bg-dark-700 border border-gold-500/50 text-white px-4 py-3 sm:px-5 sm:py-3 rounded-2xl rounded-tr-none max-w-[85%] text-xs sm:text-sm">
@@ -1066,7 +1287,7 @@
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i>`;
-            
+
             const loadingId = 'loading-' + Date.now();
             const loadingHTML = `
                 <div id="${loadingId}" class="flex items-start mb-4">
@@ -1086,7 +1307,7 @@
             try {
                 const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const systemPrompt = "You are the Tradeverse AI Analyst, an expert financial advisor for a platform that tracks Crypto, the Indian NSE, and Forex. Provide concise, professional, and analytical answers. Format text with markdown if needed, but keep it readable in HTML. Never provide guaranteed financial advice.";
-                
+
                 const payload = {
                     contents: [{ parts: [{ text: userText }] }],
                     systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -1101,14 +1322,14 @@
 
                 const data = await response.json();
                 let aiResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                if(!aiResponseText) throw new Error("Empty response from AI");
+
+                if (!aiResponseText) throw new Error("Empty response from AI");
 
                 aiResponseText = aiResponseText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-gold-400">$1</strong>');
                 aiResponseText = aiResponseText.replace(/\n/g, '<br/>');
 
                 document.getElementById(loadingId).remove();
-                
+
                 const aiMsgHTML = `
                     <div class="flex items-start mb-4">
                         <div class="w-8 h-8 rounded-full bg-gold-500 flex-shrink-0 flex items-center justify-center mr-2 sm:mr-3 mt-1">
@@ -1124,9 +1345,9 @@
             } catch (error) {
                 console.error("AI Error:", error);
                 document.getElementById(loadingId).remove();
-                
+
                 let errorMsg = "I'm having trouble connecting to my analysis servers right now. Please try again later.";
-                if(error.message.includes("API key")) {
+                if (error.message.includes("API key")) {
                     errorMsg = "API configuration error. The platform requires a valid runtime API key to process AI requests.";
                 }
 
@@ -1153,11 +1374,11 @@
             e.preventDefault();
             const input = document.getElementById('community-input');
             const msg = input.value.trim();
-            if(!msg) return;
+            if (!msg) return;
 
             const chatContainer = document.getElementById('community-messages');
-            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             const msgHTML = `
                 <div class="flex items-start mb-4 justify-end">
                     <div class="text-right">
@@ -1169,7 +1390,7 @@
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-dark-700 flex items-center justify-center text-xs sm:text-sm font-bold ml-2 sm:ml-3 border border-gold-500 text-gold-500 shrink-0">YOU</div>
                 </div>
             `;
-            
+
             chatContainer.insertAdjacentHTML('beforeend', msgHTML);
             input.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -1177,7 +1398,7 @@
             setTimeout(() => {
                 const replies = ["Agreed.", "Let's watch the volume.", "Bullish patterns forming.", "Careful with the resistance level here."];
                 const reply = replies[Math.floor(Math.random() * replies.length)];
-                
+
                 const replyHTML = `
                 <div class="flex items-start mb-4">
                     <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-600 flex items-center justify-center text-xs sm:text-sm font-bold mr-2 sm:mr-3 border border-gray-600 text-white shrink-0">TR</div>
@@ -1186,7 +1407,7 @@
                             <span class="text-[10px] sm:text-xs text-gold-400 font-bold block mb-1">Trader_X</span>
                             <p class="text-xs sm:text-sm">${reply}</p>
                         </div>
-                        <span class="text-[10px] sm:text-xs text-gray-500 mt-1 ml-1">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        <span class="text-[10px] sm:text-xs text-gray-500 mt-1 ml-1">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 </div>
                 `;
@@ -1211,7 +1432,7 @@
         function processMockPayment() {
             document.getElementById('payment-actions').classList.add('hidden');
             document.getElementById('payment-processing').classList.remove('hidden');
-            
+
             setTimeout(() => {
                 closePaymentModal();
                 const fakePaymentId = "pay_" + Math.random().toString(36).substr(2, 14);
@@ -1234,9 +1455,9 @@
             if (tData) {
                 return tData.price * (tData.isCrypto ? 83 : 1);
             }
-            if(ticker.includes('USD')) return 83.5;
-            if(ticker === 'ADA') return 45.5; 
-            if(ticker === 'DOGE') return 12.3;
+            if (ticker.includes('USD')) return 83.5;
+            if (ticker === 'ADA') return 45.5;
+            if (ticker === 'DOGE') return 12.3;
             return 1000.0;
         }
 
@@ -1244,11 +1465,11 @@
             try {
                 const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
                 const data = await res.json();
-                
-                if(Array.isArray(data)) {
+
+                if (Array.isArray(data)) {
                     data.forEach(item => {
                         const target = tickerData.find(t => t.symbol === item.symbol);
-                        if(target) {
+                        if (target) {
                             target.price = parseFloat(item.lastPrice);
                             target.change = parseFloat(item.priceChangePercent);
                         }
@@ -1259,7 +1480,7 @@
             }
 
             tickerData.forEach(item => {
-                if(!item.isCrypto) {
+                if (!item.isCrypto) {
                     const fluctuation = (Math.random() - 0.5) * 0.005;
                     item.price = item.price * (1 + fluctuation);
                     item.change = item.change + (fluctuation * 10);
@@ -1267,8 +1488,8 @@
             });
 
             updateTickerUI();
-            
-            if(!document.getElementById('page-dashboard').classList.contains('hidden') && userAccount) {
+
+            if (!document.getElementById('page-dashboard').classList.contains('hidden') && userAccount) {
                 updateDashboardUI();
             }
         }
@@ -1277,17 +1498,17 @@
             const createHTML = () => tickerData.map(t => {
                 const colorClass = t.change >= 0 ? "text-green-500" : "text-red-500";
                 const icon = t.change >= 0 ? "▲" : "▼";
-                const formattedPrice = t.price < 10 ? t.price.toFixed(4) : t.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const formattedPrice = t.price < 10 ? t.price.toFixed(4) : t.price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 return `<span class="mx-3 sm:mx-4 font-semibold">${t.display} <span class="text-gray-400 text-[10px] sm:text-xs ml-1">${formattedPrice}</span> <span class="${colorClass} ml-1">${icon} ${Math.abs(t.change).toFixed(2)}%</span></span> •`;
             }).join(" ");
 
             const htmlString = createHTML();
-            
+
             const homeTicker = document.getElementById('live-ticker-track-home');
-            if(homeTicker) homeTicker.innerHTML = htmlString + htmlString;
+            if (homeTicker) homeTicker.innerHTML = htmlString + htmlString;
 
             const marketsTicker = document.getElementById('live-ticker-track-markets');
-            if(marketsTicker) marketsTicker.innerHTML = htmlString + htmlString;
+            if (marketsTicker) marketsTicker.innerHTML = htmlString + htmlString;
         }
 
         fetchLiveTickerData();
@@ -1303,14 +1524,14 @@
         function processLogin(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value;
-            userAccount = { username: username, balance: 100000, portfolio: {}, history: [] }; 
-            
+            userAccount = { username: username, balance: 100000, portfolio: {}, history: [] };
+
             toggleLoginModal();
             updateAuthUI();
-            switchMarket(activeMarket); 
+            switchMarket(activeMarket);
 
             const heroBtn = document.getElementById('hero-login-btn');
-            if(heroBtn) heroBtn.classList.add('hidden');
+            if (heroBtn) heroBtn.classList.add('hidden');
 
             showModal(`Welcome to the trading floor, ${username}!<br><br>We have credited your wallet with ₹100,000 in paper trading funds. Access your Dashboard from the top menu to view your portfolio.`, "Authentication Successful");
         }
@@ -1319,9 +1540,9 @@
             userAccount = null;
             updateAuthUI();
             switchMarket(activeMarket);
-            
+
             const heroBtn = document.getElementById('hero-login-btn');
-            if(heroBtn) heroBtn.classList.remove('hidden');
+            if (heroBtn) heroBtn.classList.remove('hidden');
 
             if (!document.getElementById('page-dashboard').classList.contains('hidden')) {
                 navigateTo('home');
@@ -1333,14 +1554,14 @@
         function updateAuthUI() {
             const desktopWrapper = document.getElementById('auth-wrapper-desktop');
             const mobileWrapper = document.getElementById('auth-wrapper-mobile');
-            
-            if(userAccount) {
+
+            if (userAccount) {
                 const htmlDesktop = `
                     <button onclick="navigateTo('dashboard')" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition flex items-center gap-2">
                         <i class="fa-solid fa-address-card"></i> My Dashboard
                     </button>
                     <button onclick="toggleDepositModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
-                        <i class="fa-solid fa-wallet"></i> ₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                        <i class="fa-solid fa-wallet"></i> ₹${userAccount.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </button>
                     <button onclick="processLogout()" class="px-3 py-2 rounded-md text-sm font-bold bg-red-900/30 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition flex items-center justify-center" title="Logout">
                         <i class="fa-solid fa-sign-out-alt"></i>
@@ -1348,11 +1569,11 @@
                 `;
                 const htmlMobile = `
                     <button onclick="navigateTo('dashboard'); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition mb-2">My Dashboard</button>
-                    <button onclick="toggleDepositModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition mb-2">₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</button>
+                    <button onclick="toggleDepositModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-green-600/20 text-green-400 border border-green-500/50 hover:bg-green-600 hover:text-white transition mb-2">₹${userAccount.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</button>
                     <button onclick="processLogout(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-red-900/30 text-red-500 border border-red-500/30 hover:bg-red-600 hover:text-white transition">Logout</button>
                 `;
-                if(desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
-                if(mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
+                if (desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
+                if (mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
             } else {
                 const htmlDesktop = `
                     <button onclick="toggleLoginModal()" class="px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition"><i class="fa-solid fa-user mr-2"></i>Login</button>
@@ -1360,8 +1581,8 @@
                 const htmlMobile = `
                     <button onclick="toggleLoginModal(); toggleMobileMenu()" class="w-full text-center px-4 py-2 rounded-md text-sm font-bold bg-dark-800 text-gold-500 border border-gold-500/50 hover:bg-dark-700 transition">Login</button>
                 `;
-                if(desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
-                if(mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
+                if (desktopWrapper) desktopWrapper.innerHTML = htmlDesktop;
+                if (mobileWrapper) mobileWrapper.innerHTML = htmlMobile;
             }
         }
 
@@ -1372,9 +1593,9 @@
         function processDeposit(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('deposit-amount').value);
-            if(amount > 0) {
+            if (amount > 0) {
                 userAccount.balance += amount;
-                
+
                 userAccount.history.unshift({
                     date: new Date().toLocaleString(),
                     type: 'DEPOSIT',
@@ -1384,7 +1605,7 @@
                 });
 
                 updateAuthUI();
-                if(!document.getElementById('page-dashboard').classList.contains('hidden')) updateDashboardUI();
+                if (!document.getElementById('page-dashboard').classList.contains('hidden')) updateDashboardUI();
 
                 toggleDepositModal();
                 showModal(`₹${amount.toLocaleString('en-IN')} has been securely added to your trading account.`, "Deposit Complete");
@@ -1392,16 +1613,16 @@
         }
 
         function openTradeModal(assetName, assetTicker) {
-            if(!userAccount) {
+            if (!userAccount) {
                 showModal("You must be logged in to access the order book and execute trades.", "Authentication Required");
                 toggleLoginModal();
                 return;
             }
-            
+
             selectedTradeAsset = { name: assetName, ticker: assetTicker };
             const estimatedInrPrice = getCurrentEstimatedPrice(assetTicker);
-            const priceStr = `Live Ask: ₹${estimatedInrPrice.toLocaleString('en-IN', {maximumFractionDigits:2})}`;
-            
+            const priceStr = `Live Ask: ₹${estimatedInrPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+
             document.getElementById('trade-asset-title').innerText = `Trade ${assetTicker}`;
             document.getElementById('trade-asset-price').innerText = priceStr;
             document.getElementById('trade-modal').classList.remove('hidden');
@@ -1414,16 +1635,16 @@
 
         function executeTrade(type) {
             const amountInr = parseFloat(document.getElementById('trade-amount').value);
-            if(!amountInr || amountInr <= 0) return;
+            if (!amountInr || amountInr <= 0) return;
 
             const currentPrice = getCurrentEstimatedPrice(selectedTradeAsset.ticker);
             const quantity = amountInr / currentPrice;
 
-            if(type === 'buy') {
-                if(userAccount.balance >= amountInr) {
+            if (type === 'buy') {
+                if (userAccount.balance >= amountInr) {
                     userAccount.balance -= amountInr;
-                    
-                    if(!userAccount.portfolio[selectedTradeAsset.ticker]) userAccount.portfolio[selectedTradeAsset.ticker] = 0;
+
+                    if (!userAccount.portfolio[selectedTradeAsset.ticker]) userAccount.portfolio[selectedTradeAsset.ticker] = 0;
                     userAccount.portfolio[selectedTradeAsset.ticker] += quantity;
 
                     userAccount.history.unshift({
@@ -1442,11 +1663,11 @@
                 }
             } else if (type === 'sell') {
                 const holdingQty = userAccount.portfolio[selectedTradeAsset.ticker] || 0;
-                
-                if(holdingQty >= quantity) {
+
+                if (holdingQty >= quantity) {
                     userAccount.portfolio[selectedTradeAsset.ticker] -= quantity;
-                    userAccount.balance += amountInr; 
-                    
+                    userAccount.balance += amountInr;
+
                     userAccount.history.unshift({
                         date: new Date().toLocaleString(),
                         type: 'SELL',
@@ -1460,29 +1681,29 @@
                     showModal(`Order filled successfully. Sold ${quantity.toFixed(4)} ${selectedTradeAsset.ticker}.`, "Sell Order Executed");
                 } else {
                     const maxInrValue = holdingQty * currentPrice;
-                    showModal(`Insufficient holdings. You only own ${holdingQty.toFixed(4)} ${selectedTradeAsset.ticker} (Approx. ₹${maxInrValue.toLocaleString('en-IN', {maximumFractionDigits:2})}).`, "Trade Failed");
+                    showModal(`Insufficient holdings. You only own ${holdingQty.toFixed(4)} ${selectedTradeAsset.ticker} (Approx. ₹${maxInrValue.toLocaleString('en-IN', { maximumFractionDigits: 2 })}).`, "Trade Failed");
                 }
             }
         }
 
         /* --- DASHBOARD UI UPDATER --- */
         function updateDashboardUI() {
-            if(!userAccount) return;
+            if (!userAccount) return;
 
             document.getElementById('dash-greeting').innerText = `Welcome back, ${userAccount.username}. Here is your live portfolio.`;
-            document.getElementById('dash-available-cash').innerText = `₹${userAccount.balance.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('dash-available-cash').innerText = `₹${userAccount.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
             let totalInvestedValue = 0;
             const holdingsContainer = document.getElementById('dash-holdings-list');
             holdingsContainer.innerHTML = '';
 
             const keys = Object.keys(userAccount.portfolio);
-            if(keys.length === 0 || keys.every(k => userAccount.portfolio[k] <= 0.000001)) {
+            if (keys.length === 0 || keys.every(k => userAccount.portfolio[k] <= 0.000001)) {
                 holdingsContainer.innerHTML = `<p class="text-gray-500 text-xs sm:text-sm text-center py-4">No assets in portfolio. Visit the screener to start trading.</p>`;
             } else {
                 keys.forEach(ticker => {
                     const qty = userAccount.portfolio[ticker];
-                    if(qty > 0.000001) { 
+                    if (qty > 0.000001) {
                         const price = getCurrentEstimatedPrice(ticker);
                         const valueInr = qty * price;
                         totalInvestedValue += valueInr;
@@ -1491,10 +1712,10 @@
                             <div class="flex justify-between items-center bg-dark-900 p-2 sm:p-3 rounded border border-dark-700">
                                 <div class="truncate pr-2">
                                     <div class="font-bold text-gray-200 text-xs sm:text-sm truncate">${ticker}</div>
-                                    <div class="text-[10px] sm:text-xs text-gray-500 truncate">${qty.toFixed(4)} QTY @ ₹${price.toLocaleString('en-IN', {maximumFractionDigits:2})}</div>
+                                    <div class="text-[10px] sm:text-xs text-gray-500 truncate">${qty.toFixed(4)} QTY @ ₹${price.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</div>
                                 </div>
                                 <div class="text-right shrink-0">
-                                    <div class="font-bold text-white text-xs sm:text-sm">₹${valueInr.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+                                    <div class="font-bold text-white text-xs sm:text-sm">₹${valueInr.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                                 </div>
                             </div>
                         `);
@@ -1502,28 +1723,28 @@
                 });
             }
 
-            document.getElementById('dash-invested-value').innerText = `₹${totalInvestedValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
+            document.getElementById('dash-invested-value').innerText = `₹${totalInvestedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
             const totalPortfolioValue = userAccount.balance + totalInvestedValue;
-            document.getElementById('dash-total-value').innerText = `₹${totalPortfolioValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('dash-total-value').innerText = `₹${totalPortfolioValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
             const historyBody = document.getElementById('dash-history-body');
             historyBody.innerHTML = '';
-            
-            if(userAccount.history.length === 0) {
+
+            if (userAccount.history.length === 0) {
                 historyBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500 text-xs sm:text-sm">No transactions yet. Start trading in the Markets dashboard!</td></tr>`;
             } else {
                 userAccount.history.forEach(tx => {
                     const typeColor = tx.type === 'BUY' || tx.type === 'DEPOSIT' ? 'text-green-500' : 'text-red-500';
                     const qtyStr = tx.qty === '-' ? '-' : parseFloat(tx.qty).toFixed(4);
-                    
+
                     historyBody.insertAdjacentHTML('beforeend', `
                         <tr class="hover:bg-dark-800/50 transition border-b border-dark-800">
                             <td class="px-4 sm:px-6 py-3 sm:py-4 text-[10px] sm:text-xs text-gray-400 whitespace-nowrap">${tx.date}</td>
                             <td class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold ${typeColor}">${tx.type}</td>
                             <td class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-white">${tx.asset}</td>
                             <td class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right text-gray-300">${qtyStr}</td>
-                            <td class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-bold text-white">₹${tx.value.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+                            <td class="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-right font-bold text-white">₹${tx.value.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         </tr>
                     `);
                 });
@@ -1532,4 +1753,5 @@
 
     </script>
 </body>
+
 </html>
